@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  white-space: nowrap;
+}
+
+.header * {
+  color: white;
+}

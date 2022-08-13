@@ -1,0 +1,13 @@
+.content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  margin: 10px;
+  width: 20%;
+}
