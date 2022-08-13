@@ -5,6 +5,7 @@
 package com.course.back;
 
 import com.course.back.model.Test;
+import com.course.back.services.CategoriesService;
 import com.course.back.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Runner {
   
-  @Autowired
-  TestService testService;
+//  @Autowired
+//  TestService testService;
   
-  @PostMapping("/test/{id}")
-  public String test(@PathVariable int id) {
-    return testService.getById(id).getName();
-  }
+//  @Autowired
+//  CategoriesService categoriesService;
+//  
+//  @GetMapping("/category/{id}")
+//  public String test(@PathVariable int id) {
+//    return categoriesService.getById(id).getName();
+//  }
 }
