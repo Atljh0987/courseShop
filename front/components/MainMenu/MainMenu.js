@@ -1,81 +1,86 @@
 import { Menu } from 'antd'
 import { LoginOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons';
 import styles from './MainMenu.module.css'
+import { useSelector } from 'react-redux';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadMenu } from '../../actions/MenuActions';
+// import { loadMenu } from "../actions/MenuActions";
 
 const count = 0;
 
-const materials = [
-  {
-    label: 'Товары',
-    key: 'materials',
-    // icon: <MailOutlined />,
-    children: [
-      {
-        type: 'group',
-        label: 'Item 1',
-        children: [
-          {
-            label: 'Option 1',
-            key: 'setting:1',
-          },
-          {
-            label: 'Option 2',
-            key: 'setting:2',
-          },
-        ],
-      },
-      {
-        type: 'group',
-        label: 'Item 2',
-        children: [
-          {
-            label: 'Option 3',
-            key: 'setting:3',
-          },
-          {
-            label: 'Option 4',
-            key: 'setting:4',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Товаdasdaры',
-    key: 'materialss',
-    // icon: <MailOutlined />,
-    children: [
-      {
-        type: 'group',
-        label: 'Item 1',
-        children: [
-          {
-            label: 'Option 1',
-            key: 'setting:1',
-          },
-          {
-            label: 'Option 2',
-            key: 'setting:2',
-          },
-        ],
-      },
-      {
-        type: 'group',
-        label: 'Item 2',
-        children: [
-          {
-            label: 'Option 3',
-            key: 'setting:3',
-          },
-          {
-            label: 'Option 4',
-            key: 'setting:4',
-          },
-        ],
-      },
-    ],
-  },
-]
+// const materials = [
+//   {
+//     label: 'Товары',
+//     key: 'materials',
+//     // icon: <MailOutlined />,
+//     children: [
+//       {
+//         type: 'group',
+//         label: 'Item 1',
+//         children: [
+//           {
+//             label: 'Option 1',
+//             key: 'setting:1',
+//           },
+//           {
+//             label: 'Option 2',
+//             key: 'setting:2',
+//           },
+//         ],
+//       },
+//       {
+//         type: 'group',
+//         label: 'Item 2',
+//         children: [
+//           {
+//             label: 'Option 3',
+//             key: 'setting:3',
+//           },
+//           {
+//             label: 'Option 4',
+//             key: 'setting:4',
+//           },
+//         ],
+//       },
+//     ],
+//   },
+//   {
+//     label: 'Товаdasdaры',
+//     key: 'materialss',
+//     // icon: <MailOutlined />,
+//     children: [
+//       {
+//         type: 'group',
+//         label: 'Item 1',
+//         children: [
+//           {
+//             label: 'Option 1',
+//             key: 'setting:1',
+//           },
+//           {
+//             label: 'Option 2',
+//             key: 'setting:2',
+//           },
+//         ],
+//       },
+//       {
+//         type: 'group',
+//         label: 'Item 2',
+//         children: [
+//           {
+//             label: 'Option 3',
+//             key: 'setting:3',
+//           },
+//           {
+//             label: 'Option 4',
+//             key: 'setting:4',
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// ]
 
 const control = [
   {
@@ -104,9 +109,16 @@ const control = [
 ];
 
 const MainMenu = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(loadMenu())
+  }, [dispatch])
+
+  const data = useSelector((state) => state.mainMenu)
+
   return (
     <>
-      <Menu theme='dark' className={styles.menu} mode="horizontal" items={materials} />
+      <Menu onClick={onClick} theme='dark' className={styles.menu} mode="horizontal" items={data} />
       <Menu theme='dark' mode="horizontal" items={control} />
     </>
   )

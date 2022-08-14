@@ -1,7 +1,9 @@
 import "antd/dist/antd.css";
+
 import MainPage from "../components/MainPage/MainPage";
 
 const Index = () => {
+  
   return (
     <MainPage />
   )
