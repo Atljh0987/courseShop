@@ -4,13 +4,13 @@
  */
 package com.course.back.repositories;
 
-import com.course.back.model.SubCategories;
+import com.course.back.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Admin
  */
-public interface SubCategoriesRepository extends JpaRepository<SubCategories, Long> {
+public interface UsersRepository extends JpaRepository<Users, Long> {
   
 }

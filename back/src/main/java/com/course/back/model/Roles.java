@@ -9,12 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -22,21 +20,13 @@ import lombok.Setter;
  */
 @Entity
 @Data
-public class SubCategories {
+public class Roles {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private int id;  
   
   private String name;
   
-  @Getter(AccessLevel.NONE)
-  @ManyToOne
-  private Categories category;
-  
-  @OneToMany(mappedBy = "subCategory")
-  private List<Materials> materials;
-
-  public String getCategory() {
-    return category.getName();
-  }
+  @OneToMany(mappedBy = "role")
+  private List<Users> users;
 }

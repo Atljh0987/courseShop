@@ -4,13 +4,13 @@
  */
 package com.course.back.repositories;
 
-import com.course.back.model.Test;
+import com.course.back.model.Materials;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Admin
  */
-public interface TestRepository extends JpaRepository<Test, Integer>{
+public interface MaterialsRepository extends JpaRepository<Materials, Long> {
   
 }

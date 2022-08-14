@@ -4,13 +4,11 @@
  */
 package com.course.back.model;
 
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -22,21 +20,32 @@ import lombok.Setter;
  */
 @Entity
 @Data
-public class SubCategories {
+public class Materials {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  
-  private String name;
   
   @Getter(AccessLevel.NONE)
   @ManyToOne
   private Categories category;
   
-  @OneToMany(mappedBy = "subCategory")
-  private List<Materials> materials;
+  @Getter(AccessLevel.NONE)
+  @ManyToOne
+  private SubCategories subCategory;
 
   public String getCategory() {
     return category.getName();
   }
+
+  public String getSubCategory() {
+    return subCategory.getName();
+  }
+  
+  private String name;
+  
+  private String description;
+  
+  private int price;
+  
+  private int count;  
 }
