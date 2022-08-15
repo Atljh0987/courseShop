@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as types from '../types'
-import {message} from 'antd'
+import { message } from 'antd'
 import { server } from '../config'
 
 export const loadMenu = () => {  

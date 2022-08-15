@@ -1,7 +1,8 @@
 import { Menu } from 'antd'
 import { LoginOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons';
 import styles from './MainMenu.module.css'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { categoryMaterials } from '../../actions/MaterialsActions';
 
 const count = 0;
 
@@ -106,10 +107,19 @@ const control = [
 
 const MainMenu = () => {
   const data = useSelector((state) => state.mainMenu)
+  const dispatch = useDispatch()
+
+
 
   return (
     <>
-      <Menu theme='dark' className={styles.menu} mode="horizontal" items={data} />
+      <Menu 
+        onClick={({key}) => dispatch(categoryMaterials("/materials/subcategory/" + key))} 
+        theme='dark' 
+        className={styles.menu} 
+        mode="horizontal" 
+        items={data}
+      />
       <Menu theme='dark' mode="horizontal" items={control} />
     </>
   )

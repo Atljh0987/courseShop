@@ -33,12 +33,12 @@ public class Materials {
   @ManyToOne
   private SubCategories subCategory;
 
-  public String getCategory() {
-    return category.getName();
+  public Long getCategory() {
+    return category.getId();
   }
 
-  public String getSubCategory() {
-    return subCategory.getName();
+  public Long getSubCategory() {
+    return subCategory.getId();
   }
   
   private String name;

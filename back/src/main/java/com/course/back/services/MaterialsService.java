@@ -27,4 +27,12 @@ public class MaterialsService {
   public List<Materials> getAll() {
     return materialsRepository.findAll();
   }
+  
+  public List<Materials> getByCategory(Long id) {
+    return materialsRepository.findByCategoryId(id);
+  }
+  
+  public List<Materials> getBySubCategory(Long id) {
+    return materialsRepository.findBySubCategoryId(id);
+  }
 }

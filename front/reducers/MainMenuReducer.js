@@ -1,4 +1,8 @@
 import { MailOutlined } from '@ant-design/icons'
+import Link from 'next/link'
+import { useDispatch } from 'react-redux'
+import { categoryMaterials } from '../actions/MaterialsActions'
+import { server } from '../config'
 import * as types from '../types'
 
 
@@ -20,7 +24,13 @@ export const mainMenuReducer = (state = initState, { type, payload }) => {
         arrayToChange.filter(e => e.key === 'materials')[0].children = payload.map(e => {
           return {
             // type: 'group',
+            key: e.id,
             label: e.name,
+            // label: (
+            //   <div onClick={(event) => console.log(event)}>
+            //     {e.name}
+            //   </div>
+            // ),
             children: e.subCategories.map(e2 => {
               return {
                 label: e2.name,

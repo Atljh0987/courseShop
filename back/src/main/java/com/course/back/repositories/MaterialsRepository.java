@@ -5,6 +5,7 @@
 package com.course.back.repositories;
 
 import com.course.back.model.Materials;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +13,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Admin
  */
 public interface MaterialsRepository extends JpaRepository<Materials, Long> {
+  
+  List<Materials> findByCategoryId(Long id);
+  
+  List<Materials> findBySubCategoryId(Long id);
   
 }
