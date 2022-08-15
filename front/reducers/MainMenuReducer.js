@@ -13,18 +13,24 @@ const initState = [
 ]
 
 export const mainMenuReducer = (state = initState, { type, payload }) => {
+    const arrayToChange = Array.from(initState)
+
     switch (type) {
       case types.FIRSTLOADMENU:
-        // let temp = state
-        // temp.filter(e => e.key == 'materials')[0].children = payload
-        return state = [
-          {
-            label: 'Товары',
-            key: 'materials',
-            icon: <MailOutlined />,
-            children: payload,
-          },
-        ]
+        arrayToChange.filter(e => e.key === 'materials')[0].children = payload.map(e => {
+          return {
+            // type: 'group',
+            label: e.name,
+            children: e.subCategories.map(e2 => {
+              return {
+                label: e2.name,
+                key: e2.id
+              }
+            })
+          }
+        })
+
+        return state = arrayToChange
       default:
         return state
     }

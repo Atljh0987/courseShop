@@ -4,8 +4,10 @@
  */
 package com.course.back.controllers;
 
+import com.course.back.model.Categories;
 import com.course.back.model.Materials;
-import com.course.back.services.MaterialsToSiteService;
+import com.course.back.services.CategoriesService;
+import com.course.back.services.MaterialsService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/materials")
 public class MaterialsController {
+//  @Autowired
+//  MaterialsToSiteService materialsToSiteService;
   @Autowired
-  MaterialsToSiteService materialsToSiteService;
+  CategoriesService categoriesService;
+  
+  @Autowired
+  MaterialsService materialsService;
+  
+  @GetMapping("/groupsSubgroups")
+  public List<Categories> getAllGroupsSubgrouops() {
+    return categoriesService.getAll();
+  }
   
   @GetMapping("/all")
-  public List<Materials> getAll() {
-    return materialsToSiteService.getAll();
+  public List<Materials> getAllMaterials() {
+    return materialsService.getAll();
   }
 }

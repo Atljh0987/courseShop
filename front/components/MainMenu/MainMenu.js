@@ -2,10 +2,6 @@ import { Menu } from 'antd'
 import { LoginOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons';
 import styles from './MainMenu.module.css'
 import { useSelector } from 'react-redux';
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loadMenu } from '../../actions/MenuActions';
-// import { loadMenu } from "../actions/MenuActions";
 
 const count = 0;
 
@@ -109,16 +105,11 @@ const control = [
 ];
 
 const MainMenu = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(loadMenu())
-  }, [dispatch])
-
   const data = useSelector((state) => state.mainMenu)
 
   return (
     <>
-      <Menu onClick={onClick} theme='dark' className={styles.menu} mode="horizontal" items={data} />
+      <Menu theme='dark' className={styles.menu} mode="horizontal" items={data} />
       <Menu theme='dark' mode="horizontal" items={control} />
     </>
   )

@@ -1,13 +1,16 @@
 import axios from 'axios'
 import * as types from '../types'
+import {message} from 'antd'
+import { server } from '../config'
 
-// export const loadMenu = () => ({ type: types.FIRSTLOADMENU })
-export const loadMenu = () => {
+export const loadMenu = () => {  
   return dispatch => {
-    axios.get("http://localhost:3000/api/materials/all").then(res => {
+    axios.get(server.back + "/api/category/all").then(res => {
       dispatch(loadMenuSuccess(res.data))
     }).catch(err => {
+      message.error(err.message);
       console.log(err)
+      setTimeout(() => dispatch(loadMenu()), 5000)
     })
   }
 }
@@ -18,5 +21,7 @@ const loadMenuSuccess = data => ({
     ...data
   ]
 });
+
+
 
 

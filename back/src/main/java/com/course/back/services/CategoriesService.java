@@ -5,7 +5,9 @@
 package com.course.back.services;
 
 import com.course.back.model.Categories;
+import com.course.back.model.SubCategories;
 import com.course.back.repositories.CategoriesRepository;
+import com.course.back.repositories.SubCategoriesRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +19,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoriesService {
   private final CategoriesRepository categoriesRepository;
+  private final SubCategoriesRepository subCategoriesRepository;
 
   @Autowired
-  public CategoriesService(CategoriesRepository categoriesRepository) {
+  public CategoriesService(CategoriesRepository categoriesRepository, SubCategoriesRepository subCategoriesRepository) {
     this.categoriesRepository = categoriesRepository;
+    this.subCategoriesRepository = subCategoriesRepository;
   }
   
   public Categories getById(long id) {
     return categoriesRepository.getReferenceById(id);
-  }
+  }  
   
   public List<Categories> getAll() {
     return categoriesRepository.findAll();
