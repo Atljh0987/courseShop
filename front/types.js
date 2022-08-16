@@ -8,3 +8,10 @@ export const RESET = 'RESET'
 export const FIRSTLOADMENU = 'FIRSTLOADMENU'
 export const FIRSTLOADMATERIALS = 'FIRSTLOADMATERIALS'
 export const CATEGORYMATERIALS = 'CATEGORYMATERIALS'
+
+
+export const LOGIN = 'LOGIN'
+
+
+export const OPENMODAL = 'OPENMODAL'
+export const CLOSEMODAL = 'CLOSEMODAL'

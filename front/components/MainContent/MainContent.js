@@ -7,8 +7,8 @@ const { Meta } = Card;
 
 let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const MainContent = () => {
-  const data = useSelector((state) => state.materials)
+const MainContent = ({data}) => {
+  // const data = useSelector((state) => state.materials)
 
   return (
     <Content
@@ -26,21 +26,25 @@ const MainContent = () => {
         <Breadcrumb.Item>App</Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.content}>
-        {data.map((e, i) => {
-          return <Link  href={"/material/" + e.id}><Card
-            style={{cursor: "pointer"}}
-            key={e.id}
-            className={styles.card}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-            actions={[<Button type="primary">В корзину</Button>]}
-          >
-            <Meta title={e.name} description={<h2>{e.price} ₽</h2>} />
-          </Card></Link>;
+        {data.map((e) => {
+          return (
+            <Link key={e.id} href={"/material/" + e.id}>
+              <Card
+                style={{cursor: "pointer"}}
+                // key={e.id}
+                className={styles.card}
+                cover={
+                  <img
+                    alt="example"
+                    src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                  />
+                }
+                actions={[<Button type="primary">В корзину</Button>]}
+              >
+                <Meta title={e.name} description={<h2>{e.price} ₽</h2>} />
+              </Card>
+            </Link>
+          )
         })}
       </div>
     </Content>

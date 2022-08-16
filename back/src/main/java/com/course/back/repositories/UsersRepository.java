@@ -5,6 +5,7 @@
 package com.course.back.repositories;
 
 import com.course.back.model.Users;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Admin
  */
 public interface UsersRepository extends JpaRepository<Users, Long> {
-  
+  Optional<Users> findByUsername(String username);
 }

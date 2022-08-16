@@ -3,6 +3,10 @@ import { LoginOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-desi
 import styles from './MainMenu.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryMaterials } from '../../actions/MaterialsActions';
+import { server } from '../../config';
+import { MailOutlined } from '@ant-design/icons'
+import { useEffect } from 'react';
+import { loadMenu } from '../../actions/MenuActions';
 
 const count = 0;
 
@@ -105,11 +109,45 @@ const control = [
   },
 ];
 
+const menuState = [
+  {
+    label: 'Товары',
+    key: 'materials',
+    icon: <MailOutlined />,
+    children: [
+    ],
+  },
+]
+
 const MainMenu = () => {
-  const data = useSelector((state) => state.mainMenu)
+
+  // console.log(data)
+
+  // menuState.filter(e => e.key === 'materials')[0].children = data.map(e => {
+  //   return {
+  //     // type: 'group',
+  //     key: e.id,
+  //     // label: e.name,
+  //     label: (
+  //       <Link href={"/category/" + e.id}>
+  //         {e.name}
+  //       </Link>
+  //     ),
+  //     children: e.subCategories.map(e2 => {
+  //       return {
+  //         label: e2.name,
+  //         key: e2.id
+  //       }
+  //     })
+  //   }
+  // })
+
   const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(loadMenu())
+  }, [dispatch])
 
-
+  const data = useSelector((state) => state.mainMenu)
 
   return (
     <>
@@ -120,7 +158,7 @@ const MainMenu = () => {
         mode="horizontal" 
         items={data}
       />
-      <Menu theme='dark' mode="horizontal" items={control} />
+      <Menu onClick={({key}) => console.log(key)} theme='dark' mode="horizontal" items={control} />
     </>
   )
 }

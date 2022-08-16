@@ -1,40 +1,23 @@
 import "antd/dist/antd.css";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { firstLoadMaterials } from "../actions/MaterialsActions";
-import { loadMenu } from "../actions/MenuActions";
-import MainPage from "../components/MainPage/MainPage";
+import Layout from "antd/lib/layout/layout";
+import MainContent from "../components/MainContent/MainContent";
+import MainFooter from "../components/MainFooter/MainFooter";
+import MainHeader from "../components/MainHeader/MainHeader";
+import { server } from "../config";
 
-const Index = () => {
-  
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(loadMenu())
-    dispatch(firstLoadMaterials())
-  }, [dispatch])
+export async function getServerSideProps() {
+  const res = await fetch(server.back + '/api/materials/all')
+  const data = await res.json()
 
-  
-  return (
-    <MainPage />
-  )
+  return { props: { data } }
+}
+
+const Index = ({data}) => {  
+  return <Layout style={{minHeight: "100vh"}}>
+          <MainHeader/>
+          <MainContent data={data}/>
+          <MainFooter/>
+        </Layout>;
 }
 
 export default Index
-
-// const Index = () => {
-//   const dispatch = useDispatch()
-//   useEffect(() => {
-//     dispatch(startClock())
-//   }, [dispatch])
-
-//   return (
-//     <>
-//       <Examples />
-//       <Link href="/show-redux-state">
-//         <a>Click to see current Redux State</a>
-//       </Link>
-//     </>
-//   )
-// }
-
-// export default Index
