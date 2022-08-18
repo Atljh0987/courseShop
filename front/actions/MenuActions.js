@@ -22,6 +22,7 @@ const loadMenuSuccess = data => ({
   ]
 });
 
+export const loadControlMenu = () => ({type: types.FIRSTLOADCONTROLMENU})
 
 
 

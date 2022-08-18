@@ -5,6 +5,8 @@
 package com.course.back.controllers;
 
 import com.course.back.security.UsersDetails;
+import java.util.Map;
+import net.minidev.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,22 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Admin
  */
 @RestController
-@RequestMapping("/test")
-public class TestController {
-  @GetMapping
-  public String test() {
-    return "Тест";
+@RequestMapping("/auth")
+public class AuthController {
+  
+  @GetMapping("/check")
+  public String checkAuth(Authentication authentication) {
+    if(authentication != null) {
+      UsersDetails u = (UsersDetails)authentication.getPrincipal();
+      return new JSONObject(Map.of("isAuth", true, "username", u.getUsername(), "role", u.getAuthorities().iterator().next().getAuthority())).toJSONString();
+    } else {
+      return new JSONObject(Map.of("isAuth", false,  "username", "", "role", "")).toJSONString();
+    }
   }
   
-  @GetMapping("/auth")
-  public String auth(Authentication authentication) {
-    UsersDetails u = (UsersDetails)authentication.getPrincipal();
-//    User u = (User) authentication.getPrincipal();
-    return u.getAuthorities().iterator().next().getAuthority();
-  }
-  
-  @GetMapping("/login")
-  public void login(Authentication authentication) {
-    System.out.println("123");
-  }
 }

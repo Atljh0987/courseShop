@@ -1,4 +1,4 @@
-import { MailOutlined } from '@ant-design/icons'
+import { LoginOutlined, MailOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import { categoryMaterials } from '../actions/MaterialsActions'
@@ -45,3 +45,49 @@ export const mainMenuReducer = (state = initState, { type, payload }) => {
         return state
     }
   }
+
+const count = 0;
+
+const controlInit = [
+  {
+    label: 'Войти',
+    key: 'signIn',
+    icon: <LoginOutlined />
+  },
+  {
+    label: "Заказы",
+    key: 'orders',
+    icon: <ShoppingOutlined />
+  },
+  {
+    label: "Корзина: " + count,
+    key: 'cart',
+    icon: <ShoppingCartOutlined />
+  },
+];
+
+export const controlMenu = (state = controlInit, {type, payload}) => {
+  const stateChange = Array.from(controlInit)
+
+  switch(type) {
+    case types.FIRSTLOADCONTROLMENU:
+      return state
+    case types.LOGIN:
+      stateChange[stateChange.findIndex(e => e.key === 'signIn')] = {
+        label: payload.username, 
+        key: 'signIn',
+        children: [
+          {label: "Выйти", key: "logout"}
+        ]
+      }
+      if(payload.isAuth) {
+        return state = stateChange 
+      } else {
+        return state
+      }
+    case types.LOGOUT:
+      state = controlInit
+    default:
+      return state
+  }
+}

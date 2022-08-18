@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { timerReducer } from './timeResucer'
 import { counterReducer } from './counterReducer'
-import { mainMenuReducer } from './MainMenuReducer'
+import { mainMenuReducer, controlMenu } from './MainMenuReducer'
 import { materialsReducer } from './MaterialsReducer'
 import { authModalReducer, authReducer } from './AuthReducer'
 
@@ -12,7 +12,8 @@ const reducers = {
   counter: counterReducer,
   timer: timerReducer,
   auth: authReducer,
-  authModal: authModalReducer
+  authModal: authModalReducer,
+  controlMenu: controlMenu
 }
 
 export default combineReducers(reducers)
