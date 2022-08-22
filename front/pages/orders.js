@@ -1,24 +1,42 @@
 import { message } from "antd";
 import "antd/dist/antd.css";
 import Layout from "antd/lib/layout/layout";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
 import MainContent from "../components/MainContent/MainContent";
 import MainFooter from "../components/MainFooter/MainFooter";
 import MainHeader from "../components/MainHeader/MainHeader";
 import { server } from "../config";
 
-// export async function getServerSideProps() {
-//   try {
-//     const res = await fetch(server.back + '/api/orders')
-//     const data = await res.json()
-//     return { props: { data } }
-//   } catch(err) {
-//     console.log(err)
-//     message.error(err.message)
-//     return { props: { data: []} }
-//   }  
-// }
+export async function getServerSideProps({req}) {
+  
+  try {
+    const res = await axios.get(server.back + '/api/orders', {
+        withCredentials: true,
+        headers: {
+          Cookie: req.headers.cookie
+        }
+    })
+    const data = res.data
 
-const Orders = () => {  
+    if(data.hasAccess) {
+      return { props: { success: true, data } }
+    } else {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      }
+    }    
+  } catch(err) {
+    console.log(err)
+    return { props: { success: false, data: []} }
+  }  
+}
+
+const Orders = ({data}) => {  
   return <h1>Заказы</h1>
 }
 

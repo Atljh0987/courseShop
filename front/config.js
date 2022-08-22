@@ -1,3 +1,4 @@
 
-export const server = {}
-server.back = "http://localhost:3000"
+export const server = {
+  back: "http://localhost:3000"
+}

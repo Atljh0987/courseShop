@@ -44,12 +44,12 @@ public class SecurityConfiguration {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests()
+    http.csrf().disable().authorizeRequests()            
+            .antMatchers("/admin").hasRole("ADMIN")
             .antMatchers("/orders", "/cart").authenticated()
             .anyRequest().permitAll()
             .and()
             .formLogin().loginProcessingUrl("/process_login")
-//            .failureHandler((req, res, auth) -> res.setStatus(400))
             .failureHandler((req, res, auth) -> res.getWriter().write(new JSONObject(Map.of("success", false)).toJSONString()))
             .successHandler((req, res, auth) -> res.getWriter().write(new JSONObject(Map.of("success", true)).toJSONString()))
             .and()
@@ -58,7 +58,8 @@ public class SecurityConfiguration {
             .logoutSuccessHandler((req, res, auth) -> res.getWriter().write(new JSONObject(Map.of("success", true)).toJSONString()))
             .and()
             .exceptionHandling()
-            .authenticationEntryPoint((req, res, auth) -> res.getWriter().write(new JSONObject(Map.of("hasAccess", false)).toJSONString()));
+            .authenticationEntryPoint((req, res, auth) -> res.getWriter().write(new JSONObject(Map.of("hasAccess", false, "error", auth.getMessage())).toJSONString()))
+            .accessDeniedHandler((req, res, auth) -> res.getWriter().write(new JSONObject(Map.of("hasAccess", false, "error", auth.getMessage())).toJSONString()));
             
 //            .exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
     return http.build();

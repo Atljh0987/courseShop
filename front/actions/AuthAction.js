@@ -11,21 +11,21 @@ export const checkLogin = () => {
         dispatch(logInSuccess(res.data))
       }      
     }).catch(err => {
-      message.error(err.message)
       console.log(err)
-      setTimeout(() => logIn(), 60000)
+      setTimeout(() => checkLogin(), 60000)
     })
   }
 }
 
 export const checkAccess = (link) => {
   return dispatch => {
-    axios.get(server.back + "/api/" + link).then(res => {
+    axios.get(server.back + "/api/" + link, { withCredentials: true }).then(res => {
       if(res.data.hasAccess === false) {
-        dispatch(openAuthModal())
+        dispatch(openAuthModal('/orders'))
       } else {        
         // document.location.href = "/orders"
-        Router.push('/orders')
+        Router.push('/' + link)
+        // Router.push('/orders')
         // document.getElementById("aaaa").click()
         // console.log(Link)
       }
@@ -42,5 +42,5 @@ const logInSuccess = data => ({
 
 export const logout = () => {return { type: types.LOGOUT }}
 
-export const openAuthModal = () => {return { type: types.OPENMODAL }}
+export const openAuthModal = (link) => {return { type: types.OPENMODAL, payload: link }}
 export const closeAuthModal = () => {return { type: types.CLOSEMODAL }}

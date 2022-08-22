@@ -5,7 +5,7 @@ import { server } from '../config'
 
 export const loadMenu = () => {  
   return dispatch => {
-    axios.get(server.back + "/api/category/all").then(res => {
+    axios.get(server.back + "/api/category/all", { withCredentials: true }).then(res => {
       dispatch(loadMenuSuccess(res.data))
     }).catch(err => {
       message.error(err.message);

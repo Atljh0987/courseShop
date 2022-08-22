@@ -1,29 +1,44 @@
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, Radio } from 'antd';
+import { Button, Form, Input, Modal, Radio, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { checkLogin, closeAuthModal } from '../../actions/AuthAction';
 import axios from 'axios';
 import { server } from '../../config';
+import { useRouter } from 'next/router';
 
-
-
-const SignIn = ({setForm}) => {
-  const dispatch = useDispatch()
-
-  const onFinish = ({username, password}) => {
-    const params = new URLSearchParams()
+const axiosSignin = (username, password) => {
+  const params = new URLSearchParams()
     params.append('username', username)
     params.append('password', password)
 
-    axios.post(server.back + "/api/process_login", params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }).then(res => {
+    return axios.post(server.back + "/api/process_login", params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
       if(res.data.success) {
-        dispatch(checkLogin())
-        dispatch(closeAuthModal())
+        
+        return true
+      } else {        
+        message.warning("Неверный логин или пароль")
+        return false
       }
     }).catch(err => {
       console.log(err)
+      return false
     })
+}
+
+const SignIn = ({setForm}) => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const link = useSelector((state) => state.authModal.link)
+
+  const onFinish = ({username, password}) => {  
+    axiosSignin(username, password).then(success => {
+      if(success) {
+        dispatch(checkLogin())
+        dispatch(closeAuthModal())
+        router.push(link)
+      }
+    })      
   }
 
   return (
@@ -61,9 +76,34 @@ const SignIn = ({setForm}) => {
 }
 
 const SignUp = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const link = useSelector((state) => state.authModal.link)
 
   const onFinish = (val) => {
-    console.log(val)
+    const params = new URLSearchParams()
+    params.append('username', val.username)
+    params.append('password', val.password)
+    params.append('email', val.email)
+    params.append('role', "ROLE_USER")
+
+    axios.post(server.back + '/api/auth/registration', params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
+      const data = res.data
+      if(data.successRegistration) {
+        axiosSignin(val.username, val.password).then(success => {
+          if(success) {
+            dispatch(checkLogin())
+            dispatch(closeAuthModal())
+            router.push(link)
+          }
+        }) 
+      } else {
+        data.errors.forEach(e => message.warning(e.defaultMessage))
+      }
+
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   return (

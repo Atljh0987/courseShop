@@ -1,4 +1,4 @@
-import { LoginOutlined, MailOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
+import { ControlOutlined, LoginOutlined, MailOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import { categoryMaterials } from '../actions/MaterialsActions'
@@ -80,6 +80,17 @@ export const controlMenu = (state = controlInit, {type, payload}) => {
           {label: "Выйти", key: "logout"}
         ]
       }
+
+      if(payload.role === 'ROLE_ADMIN') {
+        stateChange.push({
+          label: 'Админка', 
+          key: 'admin',
+          icon: <ControlOutlined />
+        })
+      } else {
+        stateChange = stateChange.filter(e => e.key !== 'admin')
+      }
+
       if(payload.isAuth) {
         return state = stateChange 
       } else {

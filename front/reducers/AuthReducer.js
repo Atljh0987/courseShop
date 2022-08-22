@@ -16,13 +16,14 @@ export const authReducer = (state = authState, { type, payload }) => {
 }
 
 const authModal = {
-  visible: false
+  visible: false,
+  link: '/'
 }
 
 export const authModalReducer = (state = authModal, {type, payload}) => {
   switch(type) {
     case types.OPENMODAL:
-      return state = { visible: true }
+      return state = { visible: true, link: payload || '/' }
     case types.CLOSEMODAL:
       return state = { visible: false }
     default:

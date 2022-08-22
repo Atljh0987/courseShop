@@ -5,7 +5,7 @@ import { server } from '../config'
 
 export const firstLoadMaterials = () => {  
   return dispatch => {
-    axios.get(server.back + "/api/materials/all").then(res => {
+    axios.get(server.back + "/api/materials/all", { withCredentials: true }).then(res => {
       dispatch(firstLoadMaterialsSuccess(res.data))
     }).catch(err => {
       message.error(err.message)
@@ -25,7 +25,7 @@ const firstLoadMaterialsSuccess = data => ({
 
 export const categoryMaterials = url => {
   return dispatch => {
-    axios.get(server.back + "/api" + url).then(res => {
+    axios.get(server.back + "/api" + url, { withCredentials: true }).then(res => {
       dispatch(categoryMaterialsSuccess(res.data))
     }).catch(err => {
       message.error(err.message)

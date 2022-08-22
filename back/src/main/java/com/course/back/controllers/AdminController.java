@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Admin
  */
 @RestController
-@RequestMapping("/orders")
-public class OrdersController {
-  
+@RequestMapping("/admin")
+public class AdminController {
   @GetMapping
   public String access() {
     return new JSONObject(Map.of("hasAccess", true)).toJSONString();

@@ -1,6 +1,7 @@
 import { message } from "antd";
 import "antd/dist/antd.css";
 import Layout from "antd/lib/layout/layout";
+import axios from "axios";
 import MainContent from "../components/MainContent/MainContent";
 import MainFooter from "../components/MainFooter/MainFooter";
 import MainHeader from "../components/MainHeader/MainHeader";

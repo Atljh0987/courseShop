@@ -4,15 +4,15 @@
  */
 package com.course.back.repositories;
 
-import com.course.back.model.Users;
-import java.util.Optional;
+import com.course.back.model.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Admin
  */
-public interface UsersRepository extends JpaRepository<Users, Long> {
-  Optional<Users> findByUsername(String username);
-  Optional<Users> findByEmail(String email);
+public interface RolesRepository extends JpaRepository<Roles, Integer> {
+  
+  Roles findByName(String name);
+  
 }

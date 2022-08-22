@@ -23,7 +23,7 @@ const MainHeader = () => {
   const control = useSelector((state) => state.controlMenu)  
 
   const onLogout = () => {
-    axios.get(server.back + "/api/logout").then(res => {
+    axios.get(server.back + "/api/logout", { withCredentials: true }).then(() => {
       dispatch(logout())
     }).catch(err => {
       message.error(err.message)
