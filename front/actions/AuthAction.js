@@ -23,11 +23,7 @@ export const checkAccess = (link) => {
       if(res.data.hasAccess === false) {
         dispatch(openAuthModal('/orders'))
       } else {        
-        // document.location.href = "/orders"
         Router.push('/' + link)
-        // Router.push('/orders')
-        // document.getElementById("aaaa").click()
-        // console.log(Link)
       }
     }).catch(err => {
       console.log(err)
@@ -44,3 +40,6 @@ export const logout = () => {return { type: types.LOGOUT }}
 
 export const openAuthModal = (link) => {return { type: types.OPENMODAL, payload: link }}
 export const closeAuthModal = () => {return { type: types.CLOSEMODAL }}
+
+export const openConfirmedModal = () => {return { type: types.OPENCONFIRMEDMODAL }}
+export const closeConfirmedModal = () => {return { type: types.CLOSECONFIRMEDMODAL }}

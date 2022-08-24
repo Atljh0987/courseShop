@@ -10,6 +10,7 @@ import styles from "./MainHeader.module.css"
 import Link from 'next/link'
 import axios from "axios"
 import { server } from "../../config"
+import ConfirmModal from "../ConfirmModal/ConfirmModal"
 
 const MainHeader = () => {
   const dispatch = useDispatch()
@@ -57,6 +58,7 @@ const MainHeader = () => {
       />
       <Menu className={styles.controlMenu} onClick={onClick} theme='dark' mode="horizontal" items={control} />
       <AuthModal/>
+      <ConfirmModal/>
     </Header>
   )
 }

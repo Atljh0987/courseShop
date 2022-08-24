@@ -8,6 +8,7 @@ import com.course.back.model.Users;
 import com.course.back.repositories.UsersRepository;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 public class RegistrationService {
   
   private final UsersRepository usersRepository;
+  
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   @Autowired
   public RegistrationService(UsersRepository usersRepository) {
@@ -29,12 +33,22 @@ public class RegistrationService {
   }
   
   public int countUsersByEmail(String email) {
-    return usersRepository.findByEmail(email).stream().toList().size();
+    Users user = usersRepository.findByEmail(email);
+    if(user != null)
+      return 1;
+    else
+      return 0;
   }
   
   
   @Transactional
   public void register(Users users) {
     usersRepository.save(users);
+  }
+  
+  @Transactional
+  public void changePassword(String password, Users user) {
+    user.setPassword(passwordEncoder.encode(password));
+    usersRepository.save(user);
   }
 }

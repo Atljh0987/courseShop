@@ -1,5 +1,5 @@
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, Radio, message } from 'antd';
+import { Button, Form, Input, Modal, Radio, message, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { checkLogin, closeAuthModal } from '../../actions/AuthAction';
@@ -178,32 +178,57 @@ const SignUp = () => {
 }
 
 const ResetPassword = ({setForm}) => {
+  const [alert, setAlert] = useState({color: "red", message: ""})
+  const [loading, setLoading] = useState(false)
+
+  const onFinish = ({email}) => {
+    setAlert({message: "", color: "green"})
+    setLoading(true)
+    axios.post(server.back + '/api/auth/reset_password',{},{ headers: {"email": email}}).then(res => {
+      setLoading(false)
+      if(res.data.successSentPassword) {
+        setAlert({message: "Новый пароль отправлен вам на почту", color: "green"})
+      } else {
+        setAlert({message: res.data.message, color: "red"})
+      }
+    }).catch(err => {
+      setLoading(false)
+      message.error(err.message);
+    })
+  }
+
+
   return (
-    <Form
-      id="resetPassword"
-      name="resetPassword"
-      initialValues={{ remember: true }}
-      // onFinish={onFinish}
-    >
-      <Form.Item
-          name="email"
-          rules={[
-            {
-              type: 'email',
-              message: 'Введенная почта некорректна!',
-            },
-            {
-              required: true,
-              message: 'Необходимо ввести почту!',
-            },
-          ]}
-        >
-          <Input prefix={<MailOutlined/>} placeholder="E-mail"/>
-        </Form.Item>
-        <a href="#" onClick={() => setForm("signIn")}>
-          &lt; Назад
-        </a>
-    </Form>
+    <>
+      {alert.message !== ""? <h4 style={{color: alert.color}}>{alert.message}</h4> : null}
+      {loading? <div style={{width: "100%", display: "flex", justifyContent: "center", marginBottom: "5px"}}><Spin /></div> : null}
+      <Form
+        id="resetPassword"
+        name="resetPassword"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+            name="email"
+            rules={[
+              {
+                type: 'email',
+                message: 'Введенная почта некорректна!',
+              },
+              {
+                required: true,
+                message: 'Необходимо ввести почту!',
+              },
+            ]}
+          >
+            <Input prefix={<MailOutlined/>} placeholder="E-mail"/>
+          </Form.Item>
+          <a href="#" onClick={() => setForm("signIn")}>
+            &lt; Назад
+          </a>
+          
+      </Form>
+    </>
   )
 }
 
