@@ -3,6 +3,7 @@ import * as types from '../types'
 const authState = {
   isAuth: false,
   username: '',
+  email: '',
   role: '',
   confirmed: 0
 }

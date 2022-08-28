@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { openConfirmedModal } from "../actions/AuthAction";
+import { checkLogin, openConfirmedModal } from "../actions/AuthAction";
 import MainContent from "../components/MainContent/MainContent";
 import MainFooter from "../components/MainFooter/MainFooter";
 import MainHeader from "../components/MainHeader/MainHeader";
@@ -40,9 +40,7 @@ export async function getServerSideProps({req}) {
 
 const Orders = ({data}) => {
   const dispatch = useDispatch()  
-  const control = useSelector((state) => {
-    return state.auth.confirmed
-  }) 
+  const control = useSelector((state) => state.auth.confirmed) 
   useEffect(() => {
     if(control === 0)
       dispatch(openConfirmedModal())

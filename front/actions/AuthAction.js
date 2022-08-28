@@ -6,7 +6,9 @@ import Router from 'next/router'
 
 export const checkLogin = () => {  
   return dispatch => {
-    axios.get(server.back + "/api/auth/check").then(res => {
+    axios.get(server.back + "/api/auth/check", {
+      withCredentials: true,
+  }).then(res => {
       if(res.data.isAuth) {
         dispatch(logInSuccess(res.data))
       }      
@@ -41,5 +43,24 @@ export const logout = () => {return { type: types.LOGOUT }}
 export const openAuthModal = (link) => {return { type: types.OPENMODAL, payload: link }}
 export const closeAuthModal = () => {return { type: types.CLOSEMODAL }}
 
-export const openConfirmedModal = () => {return { type: types.OPENCONFIRMEDMODAL }}
+export const openConfirmedModal = () => {
+  return dispatch => {
+    axios.get(server.back + "/api/auth/check").then(res => {
+      if(res.data.isAuth) {
+        dispatch(logInSuccess(res.data))
+        if(res.data.confirmed == 0) {
+          dispatch(openConfirmedModalAction())
+        } else {
+          dispatch(closeConfirmedModal())
+        }        
+      }      
+    }).catch(err => {
+      console.log(err)
+      setTimeout(() => checkLogin(), 60000)
+    })
+  }
+}
+
+
+export const openConfirmedModalAction = () => {return { type: types.OPENCONFIRMEDMODAL }}
 export const closeConfirmedModal = () => {return { type: types.CLOSECONFIRMEDMODAL }}

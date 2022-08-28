@@ -8,6 +8,7 @@ import com.course.back.model.Users;
 import com.course.back.repositories.UsersRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +24,8 @@ public class UsersService {
     this.usersRepository = usersRepository;
   }
   
+  
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public List<Users> getAll() {
     return usersRepository.findAll();
   }

@@ -60,9 +60,15 @@ public class AuthController {
   public String checkAuth(Authentication authentication) {
     if(authentication != null) {
       UsersDetails u = (UsersDetails)authentication.getPrincipal();
-      return new JSONObject(Map.of("isAuth", true, "username", u.getUsername(), "role", u.getAuthorities().iterator().next().getAuthority(), "confirmed", u.getUsers().getConfirmed())).toJSONString();
+      Users user = usersService.getUserByEmail(u.getUsers().getEmail());
+      return new JSONObject(Map.of(
+              "isAuth", true, 
+              "username", user.getUsername(), 
+              "role", u.getAuthorities().iterator().next().getAuthority(),
+              "email", user.getEmail(),
+              "confirmed", user.getConfirmed())).toJSONString();
     } else {
-      return new JSONObject(Map.of("isAuth", false,  "username", "", "role", "")).toJSONString();
+      return new JSONObject(Map.of("isAuth", false,  "username", "", "role", "", "email", "", "confirmed", 0)).toJSONString();
     }
   }
   

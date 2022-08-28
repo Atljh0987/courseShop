@@ -6,6 +6,7 @@ package com.course.back.services;
 
 import com.course.back.model.Users;
 import com.course.back.repositories.UsersRepository;
+import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,12 @@ public class RegistrationService {
   
   @Autowired
   PasswordEncoder passwordEncoder;
+  
+  @Autowired
+  EmailService emailService;
+  
+  @Autowired
+  TokenService tokenService;
 
   @Autowired
   public RegistrationService(UsersRepository usersRepository) {
@@ -43,7 +50,11 @@ public class RegistrationService {
   
   @Transactional
   public void register(Users users) {
-    usersRepository.save(users);
+    String uuid = UUID.randomUUID().toString();      
+    usersRepository.save(users);    
+    tokenService.insert(uuid, users);
+    
+    emailService.sendSimpleEmail(users.getEmail(), "Подтверждение почты", "Ваша ссылка для подтверждения почты: http://localhost:3000/token/" + uuid);
   }
   
   @Transactional

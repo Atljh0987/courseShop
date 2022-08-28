@@ -2,7 +2,7 @@ import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Radio, message, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { checkLogin, closeAuthModal } from '../../actions/AuthAction';
+import { checkLogin, closeAuthModal, openConfirmedModal } from '../../actions/AuthAction';
 import axios from 'axios';
 import { server } from '../../config';
 import { useRouter } from 'next/router';
@@ -79,8 +79,12 @@ const SignUp = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const link = useSelector((state) => state.authModal.link)
+  const [alert, setAlert] = useState({color: "red", message: ""})
+  const [loading, setLoading] = useState(false)
 
   const onFinish = (val) => {
+    setAlert({message: "", color: "green"})
+    setLoading(true)
     const params = new URLSearchParams()
     params.append('username', val.username)
     params.append('password', val.password)
@@ -88,6 +92,7 @@ const SignUp = () => {
     params.append('role', "ROLE_USER")
 
     axios.post(server.back + '/api/auth/registration', params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
+      setLoading(false)
       const data = res.data
       if(data.successRegistration) {
         axiosSignin(val.username, val.password).then(success => {
@@ -95,6 +100,7 @@ const SignUp = () => {
             dispatch(checkLogin())
             dispatch(closeAuthModal())
             router.push(link)
+            message.success("На почту отправлено письмо с подтверждением")
           }
         }) 
       } else {
@@ -102,12 +108,16 @@ const SignUp = () => {
       }
 
     }).catch(err => {
+      setLoading(false)
+      setAlert({message: err.message, color: "red"})
       console.log(err)
     })
   }
 
   return (
     <>
+      {alert.message !== ""? <h4 style={{color: alert.color}}>{alert.message}</h4> : null}
+      {loading? <div style={{width: "100%", display: "flex", justifyContent: "center", marginBottom: "5px"}}><Spin /></div> : null}
       <Form
         id="signUp"
         name="signUp"
