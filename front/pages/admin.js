@@ -9,9 +9,12 @@ import {
 } from '@ant-design/icons';
 import "antd/dist/antd.css";
 import { Breadcrumb, Layout, Menu } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../css/AdminPage.module.css'
 import UserControl from "../components/AdminComponents/UserControl/UserControl";
+import { useDispatch, useSelector } from "react-redux";
+import GoodsControl from "../components/AdminComponents/GoodsControl/GoodsControl";
+import { pageSwitcher, usersActions } from "../actions/AdminActions";
 const { Header, Content, Footer, Sider } = Layout;
 
 export async function getServerSideProps({req}) {
@@ -50,22 +53,27 @@ function getItem(label, key, icon, children) {
   };
 }
 
+function choosePage(page) {
+  switch(page) {
+    case '/user': return <UserControl/>
+    case '/goods': return <GoodsControl/>
+    default: return <UserControl/>
+  }
+}
+
 const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem('Пользователи', 'users', <PieChartOutlined />),
+  getItem('Товары', 'goods', <DesktopOutlined />),
 ];
 
 const Admin = ({data}) => {
-  const page = useState((state) => state.admin.activePage)
+  const page = useSelector((state) => state.adminGoToPage.activePage)
+  const dispatch = useDispatch()
+
   
+
   const [collapsed, setCollapsed] = useState(false);
+  
   return (
     <Layout
       style={{
@@ -74,7 +82,7 @@ const Admin = ({data}) => {
     >
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className={styles.logo} />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu theme="dark" mode="inline" items={items} onClick={e => dispatch(pageSwitcher(e.key))}/>
       </Sider>
       <Layout>
         <Header
@@ -100,7 +108,9 @@ const Admin = ({data}) => {
               minHeight: 360,
             }}
           >
-            <UserControl/>
+            {
+              choosePage(page)
+            }            
           </div>
         </Content>
         <Footer

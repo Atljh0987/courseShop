@@ -4,7 +4,7 @@ import { counterReducer } from './counterReducer'
 import { mainMenuReducer, controlMenu } from './MainMenuReducer'
 import { materialsReducer } from './MaterialsReducer'
 import { authModalReducer, authReducer, confirmedModalReducer } from './AuthReducer'
-import { goToPageReducer } from './AdminReducer'
+import { goToPageReducer, usersDataReducer } from './AdminReducer'
 
 // COMBINED REDUCERS
 const reducers = {
@@ -16,7 +16,8 @@ const reducers = {
   authModal: authModalReducer,
   controlMenu: controlMenu,
   confirmedModal: confirmedModalReducer,
-  admin: goToPageReducer
+  adminGoToPage: goToPageReducer,
+  usersData: usersDataReducer
 }
 
 export default combineReducers(reducers)
