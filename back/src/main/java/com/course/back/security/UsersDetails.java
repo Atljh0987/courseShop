@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class UsersDetails implements UserDetails {
   private final Users users;
-
+  
   @Autowired
   public UsersDetails(Users users) {
     this.users = users;
@@ -26,7 +26,7 @@ public class UsersDetails implements UserDetails {
   
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singletonList(new SimpleGrantedAuthority(users.getRole()));
+    return Collections.singletonList(new SimpleGrantedAuthority(users.getRoleName()));
   }
 
   @Override

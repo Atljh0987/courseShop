@@ -1,7 +1,8 @@
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { Button, Form, Input, Modal, Popconfirm, Select, Table } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usersActions } from '../../../actions/AdminActions';
+import _ from 'lodash';
 
 const EditableContext = React.createContext(null);
 
@@ -88,32 +89,25 @@ const EditableCell = ({
 
 const UserControl = ({data}) => {
   const dispatch = useDispatch()
+  const [visibleEdit, setVisibleEdit] = useState(false)
   const dataSource = useSelector((state) => state.usersData.data)
   
   useEffect(() => {
     dispatch(usersActions('getAll'))
   }, [dispatch])
 
-  // const [dataSource, setDataSource] = useState([
-  //   {
-  //     key: '0',
-  //     name: 'Edward King 0',
-  //     age: '32',
-  //     address: 'London, Park Lane no. 0',
-  //   },
-  //   {
-  //     key: '1',
-  //     name: 'Edward King 1',
-  //     age: '32',
-  //     address: 'London, Park Lane no. 1',
-  //   },
-  // ]);
-  // const [count, setCount] = useState(2);
-
   const handleDelete = (key) => {
     // const newData = dataSource.filter((item) => item.key !== key);
     // setDataSource(newData);
   };
+
+  // const confirmedEdit = () => {
+  //   if(userToEdit.key) {
+  //     dispatch(usersActions('editUser', userToEdit))
+  //   }
+    
+  //   setVisibleEdit(false)
+  // }
 
   const defaultColumns = [
     {
@@ -129,14 +123,40 @@ const UserControl = ({data}) => {
     {
       title: 'Email',
       dataIndex: 'email',
+      editable: true,
     },
     {
       title: 'Роль',
-      dataIndex: 'role',
+      dataIndex: 'roles',
+      render: (roles, record) => (
+        <Select
+          defaultValue={record.roleKey}
+          style={{
+            width: 120,
+          }}
+          onSelect={(val, opt) => {record.roleSelect = val}}
+        >
+          {
+            roles.map(role => {
+              return <Select.Option key= {role.id} value={role.id}>{role.name}</Select.Option>;
+            })
+          }
+        </Select>
+      )
     },
     {
       title: 'Статус',
       dataIndex: 'confirmed',
+    },
+    {
+      title: 'Сохранить',
+      dataIndex: 'save',
+      render: (_, record) =>
+      dataSource.length >= 1 ? (
+          <Popconfirm title="Сохранить изменения?" disabled={visibleEdit} onConfirm={() => saveChanges(record)}>
+            <a>Сохранить</a>
+          </Popconfirm>
+        ) : null,
     },
     {
       title: 'Удалить',
@@ -152,23 +172,21 @@ const UserControl = ({data}) => {
 
   const handleAdd = () => {
     console.log(13123)
-    // const newData = {
-    //   key: count,
-    //   name: `Edward King ${count}`,
-    //   age: '32',
-    //   address: `London, Park Lane no. ${count}`,
-    // };
-    // setDataSource([...dataSource, newData]);
-    // setCount(count + 1);
   };
 
+  const saveChanges = (row) => {
+    // console.log(row)
+    dispatch(usersActions('saveEdited', row))
+    // const previous = dataSource.filter(e => e.key === row.key)[0]
+    // return _.isEqual(row, previous)
+  }
+
   const handleSave = (row) => {
-    console.log(row)
-    // const newData = [...dataSource];
-    // const index = newData.findIndex((item) => row.key === item.key);
-    // const item = newData[index];
-    // newData.splice(index, 1, { ...item, ...row });
-    // setDataSource(newData);
+    const newData = [...dataSource];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, ...row });
+    dispatch(usersActions('editUser', newData));
   };
 
   const components = {
@@ -193,6 +211,7 @@ const UserControl = ({data}) => {
       }),
     };
   });
+
   return (
     <div>
       <Button

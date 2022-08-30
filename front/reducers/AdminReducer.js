@@ -23,6 +23,10 @@ export const usersDataReducer = (state = usersState, {type, payload}) => {
   switch(type) {
     case types.GETALLUSERS:
       return state = payload
+    case types.EDITUSER:
+      return state = payload
+    case types.SAVEEDITED:
+      return state
     default:
       return state
   }

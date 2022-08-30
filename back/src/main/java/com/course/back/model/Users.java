@@ -41,7 +41,11 @@ public class Users {
     this.role = role;
   }
 
-  public String getRole() {
+  public int getRole() {
+    return role.getId();
+  }
+  
+  public String getRoleName() {
     return role.getName();
   }
   

@@ -30,7 +30,21 @@ public class UsersService {
     return usersRepository.findAll();
   }
   
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public List<Users> editUser(int id) {
+    Users user = usersRepository.findById(Long.valueOf(id)).stream().toList().get(0);
+    return usersRepository.findAll();
+  }
+  
   public Users getUserByEmail(String email) {
     return usersRepository.findByEmail(email);
+  }
+  
+  public Users getUserById(int id) {
+    return usersRepository.findById(Long.valueOf(id)).stream().toList().get(0);
+  }
+  
+  public void saveUser(Users user) {
+    usersRepository.save(user);
   }
 }
