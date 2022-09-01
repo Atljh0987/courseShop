@@ -31,3 +31,17 @@ export const usersDataReducer = (state = usersState, {type, payload}) => {
       return state
   }
 }
+
+const rolesState = {
+  loading: true,
+  data: []
+}
+
+export const rolesDataReducer = (state = rolesState, {type, payload}) => {
+  switch(type) {
+    case types.GETALLROLES:
+      return state = payload
+    default: 
+      return state
+  }
+}

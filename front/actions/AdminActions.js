@@ -30,7 +30,18 @@ const getAllUsers = () => {
     axios.get(server.back + '/api/users/all').then(res => {
       return axios.get(server.back + '/api/roles/all').then(roles => {
         const data = res.data
-        const dto = data.map(e => {return {key: e.id, username: e.username, email: e.email, roleKey: e.role, roles: roles.data, roleSelect: e.role, confirmed: e.confirmed == 1? "Подтвержден":"Не подтвержден"}})
+        const dto = data.map(e => {
+          return {
+            key: e.id, 
+            username: e.username, 
+            email: e.email, 
+            roleKey: e.role, 
+            roles: roles.data, 
+            roleSelect: e.role, 
+            confirmed: e.confirmed,
+            confirmedSelect: e.confirmed
+          }
+        })
         dispatch({type: types.GETALLUSERS, payload: {loading: false, data: dto}})
       })      
     }).catch(err => {
@@ -43,19 +54,7 @@ const getAllUsers = () => {
 const saveEdited = (user) => {
   return dispatch => {
     if(user) {
-      dispatch({type: types.SAVEEDITED, payload: {loading: false, data: user}})
-      const params = new URLSearchParams()
-      params.append('id', user.key)
-      params.append('username', user.username)
-      params.append('email', user.email)
-      params.append('role', user.roleSelect)
-      params.append('confirmed', user.confirmed === 'Подтвержден'? 1 : 0)
-
-      axios.put(server.back + '/api/users/edit', params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      dispatch({type: types.SAVEEDITED, payload: {loading: false, data: user}})      
     }    
   }
 }
@@ -63,22 +62,26 @@ const saveEdited = (user) => {
 const editUser = (user) => {  
   return dispatch => {
     dispatch({type: types.EDITUSER, payload: {loading: false, data: user}})
-
-  //   
   }
 }
 
-// const getAllUsers = () => {
-  // return dispatch => {
-  //   axios.get(server.back + "/api/auth/check", {
-  //     withCredentials: true,
-  // }).then(res => {
-  //     if(res.data.isAuth) {
-  //       dispatch(logInSuccess(res.data))
-  //     }      
-  //   }).catch(err => {
-  //     console.log(err)
-  //     setTimeout(() => checkLogin(), 60000)
-  //   })
-  // }
-// }
+export const rolesAction = (action, payload) => {
+  return dispatch => {
+    switch(action) {
+      case types.GETALLROLES:
+        return dispatch(getAllRoles(action)); break;
+      default: 
+        return null
+    }
+  }
+}
+
+const getAllRoles = (action) => {
+  return dispatch => {
+    axios.get(server.back + '/api/roles/all').then(res => {
+      return dispatch({type: action, payload: {loading: false, data: res.data}});
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+}

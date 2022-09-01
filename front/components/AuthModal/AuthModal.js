@@ -30,12 +30,14 @@ const SignIn = ({setForm}) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const link = useSelector((state) => state.authModal.link)
+  const control = useSelector((state) => state.auth.confirmed) 
 
   const onFinish = ({username, password}) => {  
     axiosSignin(username, password).then(success => {
       if(success) {
         dispatch(checkLogin())
         dispatch(closeAuthModal())
+        dispatch(openConfirmedModal())
         router.push(link)
       }
     })      
@@ -231,11 +233,11 @@ const ResetPassword = ({setForm}) => {
               },
             ]}
           >
-            <Input prefix={<MailOutlined/>} placeholder="E-mail"/>
-          </Form.Item>
-          <a href="#" onClick={() => setForm("signIn")}>
-            &lt; Назад
-          </a>
+          <Input prefix={<MailOutlined/>} placeholder="E-mail"/>
+        </Form.Item>
+        <a href="#" onClick={() => setForm("signIn")}>
+          &lt; Назад
+        </a>
           
       </Form>
     </>

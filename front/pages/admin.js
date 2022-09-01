@@ -13,9 +13,11 @@ import React, { useEffect, useState } from 'react';
 import styles from '../css/AdminPage.module.css'
 import UserControl from "../components/AdminComponents/UserControl/UserControl";
 import { useDispatch, useSelector } from "react-redux";
-import GoodsControl from "../components/AdminComponents/GoodsControl/GoodsControl";
-import { pageSwitcher, usersActions } from "../actions/AdminActions";
+import CategoriesControl from "../components/AdminComponents/GoodsControl/CategoriesControl/CategoriesContol";
+import { pageSwitcher, usersActions, rolesAction } from "../actions/AdminActions";
+import Link from "next/link";
 const { Header, Content, Footer, Sider } = Layout;
+import * as types from '../types'
 
 export async function getServerSideProps({req}) {
   
@@ -56,22 +58,19 @@ function getItem(label, key, icon, children) {
 function choosePage(page) {
   switch(page) {
     case '/user': return <UserControl/>
-    case '/goods': return <GoodsControl/>
+    case '/Categories': return <CategoriesControl/>
     default: return <UserControl/>
   }
 }
 
 const items = [
   getItem('Пользователи', 'users', <PieChartOutlined />),
-  getItem('Товары', 'goods', <DesktopOutlined />),
+  getItem('Товары', 'Categories', <DesktopOutlined />),
 ];
 
 const Admin = ({data}) => {
   const page = useSelector((state) => state.adminGoToPage.activePage)
   const dispatch = useDispatch()
-
-  
-
   const [collapsed, setCollapsed] = useState(false);
   
   return (
@@ -80,8 +79,8 @@ const Admin = ({data}) => {
         minHeight: '100vh',
       }}
     >
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className={styles.logo} />
+      <Sider collapsible className={styles.slider} collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <Link href="/" ><p className={styles.logo}>Назад</p></Link>
         <Menu theme="dark" mode="inline" items={items} onClick={e => dispatch(pageSwitcher(e.key))}/>
       </Sider>
       <Layout>

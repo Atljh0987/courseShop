@@ -5,12 +5,19 @@
 package com.course.back.controllers;
 
 import com.course.back.dto.CategoriesDTO;
+import com.course.back.model.Categories;
 import com.course.back.services.CategoriesService;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.List;
+import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,5 +42,35 @@ public class CategoriesController {
   @GetMapping("/all")
   public List<CategoriesDTO> getCategoriesAll() {
     return categoriesService.getAll().stream().map(e -> modelMapper.map(e, CategoriesDTO.class)).toList();
+  }
+  
+  @PutMapping("/edit")
+  public String editCategory(@ModelAttribute Categories categories) {    
+    try {
+      categoriesService.addCategory(categories);
+      return new JSONObject(Map.of("successEdit", true, "message", "Категория успешно отредактирована")).toJSONString();
+    } catch(Exception ex) {
+      return new JSONObject(Map.of("successEdit", false, "message", ex.getMessage())).toJSONString();
+    }
+  }
+  
+  @PutMapping("/add")
+  public String addCategory(@ModelAttribute Categories categories) {    
+    try {
+      categoriesService.addCategory(categories);
+      return new JSONObject(Map.of("successAdd", true, "message", "Категория успешно добавлена")).toJSONString();
+    } catch(Exception ex) {
+      return new JSONObject(Map.of("successAdd", false, "message", ex.getMessage())).toJSONString();
+    }
+  }
+  
+  @DeleteMapping("/delete")
+  public String deleteCategory(@RequestHeader int id) {
+    try {
+      categoriesService.deleteCategory(id);
+      return new JSONObject(Map.of("successDelete", true, "message", "Категория успешно удалена")).toJSONString();
+    } catch(Exception ex) {
+      return new JSONObject(Map.of("successDelete", false, "message", ex.getMessage())).toJSONString();
+    }
   }
 }

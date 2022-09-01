@@ -44,7 +44,14 @@ public class UsersService {
     return usersRepository.findById(Long.valueOf(id)).stream().toList().get(0);
   }
   
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void saveUser(Users user) {
     usersRepository.save(user);
+  }
+  
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public void deleteUser(int id) {
+    Users user = usersRepository.findById(Long.valueOf(id)).stream().toList().get(0);
+    usersRepository.delete(user);
   }
 }

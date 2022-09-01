@@ -4,7 +4,8 @@ import { counterReducer } from './counterReducer'
 import { mainMenuReducer, controlMenu } from './MainMenuReducer'
 import { materialsReducer } from './MaterialsReducer'
 import { authModalReducer, authReducer, confirmedModalReducer } from './AuthReducer'
-import { goToPageReducer, usersDataReducer } from './AdminReducer'
+import { goToPageReducer, rolesDataReducer, usersDataReducer } from './AdminReducer'
+import { allCategories } from './CategoriesReducer'
 
 // COMBINED REDUCERS
 const reducers = {
@@ -17,7 +18,9 @@ const reducers = {
   controlMenu: controlMenu,
   confirmedModal: confirmedModalReducer,
   adminGoToPage: goToPageReducer,
-  usersData: usersDataReducer
+  usersData: usersDataReducer,
+  rolesData: rolesDataReducer,
+  categories: allCategories
 }
 
 export default combineReducers(reducers)

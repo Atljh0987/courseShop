@@ -1,11 +1,11 @@
 import { Button, Form, Input, Modal, Popconfirm, Select, Table, message } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { rolesAction, usersActions } from '../../../actions/AdminActions';
 import _ from 'lodash';
 import axios from 'axios';
-import { server } from '../../../config';
-import * as types from '../../../types'
+import { server } from '../../../../config';
+import * as types from '../../../../types'
+import { categoriesActions } from '../../../../actions/CategoriesActions';
 
 const EditableContext = React.createContext(null);
 
@@ -17,7 +17,6 @@ const EditableRow = ({ index, ...props }) => {
         <tr {...props} />
       </EditableContext.Provider>
     </Form>
-    // <h1>1231241f</h1>
   );
 };
 
@@ -90,23 +89,25 @@ const EditableCell = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-const UserControl = ({data}) => {
+const CategoriesControl = ({data}) => {
   const dispatch = useDispatch()
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [visibleEdit, setVisibleEdit] = useState(false)
   const [addLoading, setAddLoading] = useState(false)
-  const dataSource = useSelector((state) => state.usersData.data)
-  const roles = useSelector((state) => state.rolesData.data)
+  const dataSource = useSelector((state) => state.categories.data)
 
   useEffect(() => {
-    dispatch(usersActions('getAll'))
-    dispatch(rolesAction(types.GETALLROLES))
+    dispatch(categoriesActions('getAll'))
   }, [dispatch])
 
   const handleDelete = (id) => {
-    axios.delete(server.back + '/api/users/delete', { headers: {'Content-Type': 'application/x-www-form-urlencoded', 'id': id}}, { withCredentials: true }).then(res => {
-      message.success(res.data.message)
-      dispatch(usersActions('getAll'))      
+    axios.delete(server.back + '/api/category/delete', { headers: {'Content-Type': 'application/x-www-form-urlencoded', 'id': id}}, { withCredentials: true }).then(res => {
+      if(res.data.successDelete) {
+        message.success(res.data.message)
+        dispatch(categoriesActions('getAll'))  
+      } else {
+        message.error(res.data.message)
+      }          
     }).catch(err => {
       message.error(err.message)
     })
@@ -118,50 +119,10 @@ const UserControl = ({data}) => {
       dataIndex: 'key'
     },
     {
-      title: 'Логин',
-      dataIndex: 'username',
+      title: 'Название',
+      dataIndex: 'name',
       width: '30%',
       editable: true,
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      editable: true,
-    },
-    {
-      title: 'Роль',
-      dataIndex: 'roles',
-      render: (roles, record) => (
-        <Select
-          defaultValue={record.roleKey}
-          style={{
-            width: 150,
-          }}
-          onSelect={(val, opt) => {record.roleSelect = val}}
-        >
-          {
-            roles.map(role => {
-              return <Select.Option key= {role.id} value={role.id}>{role.name}</Select.Option>;
-            })
-          }
-        </Select>
-      )
-    },
-    {
-      title: 'Статус',
-      dataIndex: 'confirmed',
-      render: (roles, record) => (
-        <Select
-          defaultValue={record.confirmed}
-          style={{
-            width: 150,
-          }}
-          onSelect={(val, opt) => {record.confirmedSelect = val}}
-        >
-          <Select.Option key={1} value={1}>Подтвержден</Select.Option>;
-          <Select.Option key={0} value={0}>Не подтвержден</Select.Option>;
-        </Select>
-      )
     },
     {
       title: 'Сохранить',
@@ -178,28 +139,21 @@ const UserControl = ({data}) => {
       dataIndex: 'delete',
       render: (_, record) =>
         dataSource.length >= 1 ? (
-          <Popconfirm title="Удалить пользователя?" onConfirm={() => handleDelete(record.key)}>
+          <Popconfirm title="Удалить категорию?" onConfirm={() => handleDelete(record.key)}>
             <a>Удалить</a>
           </Popconfirm>
         ) : null,
     },
   ];
 
-  const saveChanges = (user) => {
+  const saveChanges = (category) => {
     const params = new URLSearchParams()
-    params.append('id', user.key)
-    params.append('username', user.username)
-    params.append('email', user.email)
-    params.append('role', user.roleSelect)
-    params.append('confirmed', user.confirmedSelect)
+    params.append('id', category.key)
+    params.append('name', category.name)
 
-    axios.put(server.back + '/api/users/edit', params).then(res => {
-      if(res.data.successEdit) {
-        dispatch(usersActions('saveEdited', user))
-        message.success(res.data.message)
-      } else {
-        message.error(res.data.message)
-      }      
+    axios.put(server.back + '/api/category/edit', params).then(res => {
+      dispatch(categoriesActions('saveEditCategory', category))
+      message.success(res.data.message)
     }).catch(err => {
       message.error(err.message)
     })
@@ -210,7 +164,7 @@ const UserControl = ({data}) => {
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
-    dispatch(usersActions('editUser', newData));
+    dispatch(categoriesActions('editCategory', newData));
   };
 
   const components = {
@@ -236,18 +190,15 @@ const UserControl = ({data}) => {
     };
   });
 
-  const addUser = (user) => {
+  const addCategory = (category) => {
     setAddLoading(true)
     const params = new URLSearchParams()
-    params.append('username', user.username)
-    params.append('email', user.email)
-    params.append('role', user.role)
-    params.append('confirmed', user.confirmed)
+    params.append('name', category.name)
 
-    axios.put(server.back + '/api/users/add', params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
+    axios.put(server.back + '/api/category/add', params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
       setAddLoading(false)
-      dispatch(usersActions('getAll'))
-      if(res.data.successRegistration) {
+      dispatch(categoriesActions('getAll'))
+      if(res.data.successAdd) {
         message.success(res.data.message)
         setVisibleAdd(false)
       } else {
@@ -269,18 +220,18 @@ const UserControl = ({data}) => {
   return (
     <div>
       <Modal
-        title="Добавить пользователя"
+        title="Добавить категорию"
         visible={visibleAdd}
         // onOk={handleOk}
         confirmLoading={addLoading}
         onCancel={() => setVisibleAdd(false)}
         footer={[
           <Button key="cancel" onClick={() => setVisibleAdd(false)}>Отмена</Button>,
-          <Button key="submit" type="primary" htmlType="submit" form="addUser">Создать</Button>
+          <Button key="submit" type="primary" htmlType="submit" form="addCategory">Создать</Button>
         ]}
       >
         <Form
-          id="addUser"
+          id="addCategory"
           labelCol={{
             span: 4,
           }}
@@ -288,58 +239,19 @@ const UserControl = ({data}) => {
             span: 14,
           }}
           layout="horizontal"
-          onFinish={addUser}
-          initialValues={{
-            role: roles.length >= 1? roles[0].name : "",
-            confirmed: 0
-          }}
-          // onValuesChange={onFormLayoutChange}
-          // size={componentSize}
+          onFinish={addCategory}
         >
           <Form.Item 
-            label="Логин" 
-            name="username"
+            label="Название" 
+            name="name"
             rules={[
               {
                 required: true,
-                message: 'Необходимо ввести логин!',
+                message: 'Необходимо ввести название!',
               },
             ]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                type: 'email',
-                message: 'Введенная почта некорректна!',
-              },
-              {
-                required: true,
-                message: 'Необходимо ввести почту!',
-              },
-            ]}
-          >
-          <Input />
-        </Form.Item>
-          <Form.Item label="Роль" name="role">
-            <Select>
-              {
-                roles.length >= 1 ? (
-                  roles.map(role => {
-                    return <Select.Option key={role.id} value={role.name}>{role.name}</Select.Option>
-                  })
-                ) : null
-              }
-            </Select>
-          </Form.Item>
-          <Form.Item label="Статус" name="confirmed">
-            <Select>
-              <Select.Option key={0} value={0}>Не подтвержден</Select.Option>
-              <Select.Option key={1} value={1}>Подтвержден</Select.Option>
-            </Select>
           </Form.Item>
         </Form>
       </Modal>
@@ -350,7 +262,7 @@ const UserControl = ({data}) => {
           marginBottom: 16,
         }}
       >
-        Добавить пользователя
+        Добавить категорию
       </Button>
       <Table
         components={components}
@@ -363,4 +275,4 @@ const UserControl = ({data}) => {
   );
 }
 
-export default UserControl
+export default CategoriesControl
