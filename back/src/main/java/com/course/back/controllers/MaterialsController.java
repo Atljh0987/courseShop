@@ -8,11 +8,19 @@ import com.course.back.model.Categories;
 import com.course.back.model.Materials;
 import com.course.back.services.CategoriesService;
 import com.course.back.services.MaterialsService;
+import com.course.back.services.SubCategoriesService;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -26,6 +34,9 @@ public class MaterialsController {
 //  MaterialsToSiteService materialsToSiteService;
   @Autowired
   CategoriesService categoriesService;
+
+  @Autowired
+  SubCategoriesService subCategoriesService;
   
   @Autowired
   MaterialsService materialsService;
@@ -48,5 +59,39 @@ public class MaterialsController {
   @GetMapping("/subcategory/{id}")
   public List<Materials> getBySubCategory(@PathVariable Long id) {
     return materialsService.getBySubCategory(id);
+  }
+  
+  @PutMapping("/edit")
+  public String edit(@ModelAttribute Materials materials, @RequestParam int categoryId, @RequestParam int subCategoryId, BindingResult bindingResult) {
+    materials.addCaterory(categoriesService.getById(categoryId));
+    materials.addSubCategory(subCategoriesService.getById(subCategoryId));
+    try {
+      materialsService.add(materials);
+      return new JSONObject(Map.of("successEdit", true, "message", "Товар успешно отредактирован")).toJSONString();
+    } catch(Exception ex) {
+      return new JSONObject(Map.of("successEdit", false, "message", ex.getMessage())).toJSONString();
+    }
+  }
+  
+  @PutMapping("/add")
+  public String save(@ModelAttribute Materials materials, @RequestParam int categoryId, @RequestParam int subCategoryId, BindingResult bindingResult) {
+    materials.addCaterory(categoriesService.getById(categoryId));
+    materials.addSubCategory(subCategoriesService.getById(subCategoryId));
+    try {
+      materialsService.add(materials);
+      return new JSONObject(Map.of("successSave", true, "message", "Товар успешно отредактирован")).toJSONString();
+    } catch(Exception ex) {
+      return new JSONObject(Map.of("successSave", false, "message", ex.getMessage())).toJSONString();
+    }
+  }
+  
+  @DeleteMapping("/delete")
+  public String delete(int id) {
+    try {
+      materialsService.delete(id);
+      return new JSONObject(Map.of("successDelete", true, "message", "Товар успешно удален")).toJSONString();
+    } catch(Exception ex) {
+      return new JSONObject(Map.of("successDelete", false, "message", ex.getMessage())).toJSONString();
+    }
   }
 }

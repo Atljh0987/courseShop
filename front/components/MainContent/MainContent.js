@@ -1,14 +1,20 @@
 import { Content } from "antd/lib/layout/layout";
 import { Breadcrumb, Card, Button } from "antd";
 import styles from "./MainContent.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import { useEffect } from "react";
+import { firstLoadMaterials } from "../../actions/MaterialsActions";
 const { Meta } = Card;
 
 let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const MainContent = ({data}) => {
-  // const data = useSelector((state) => state.materials)
+const MainContent = () => {
+  const dispatch = useDispatch()
+  const data = useSelector((state) => state.materials)
+  useEffect(() => {
+    dispatch(firstLoadMaterials())
+  }, [dispatch])
 
   return (
     <Content

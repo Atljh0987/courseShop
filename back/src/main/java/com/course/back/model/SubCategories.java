@@ -7,7 +7,6 @@ package com.course.back.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +15,7 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -31,14 +31,19 @@ public class SubCategories {
   private String name;
   
   @Getter(AccessLevel.NONE)
+  @Setter(AccessLevel.NONE)
   @ManyToOne
   private Categories category;
+  
+  public void addCategory(Categories category) {
+    this.category = category;
+  }
   
   @JsonIgnore
   @OneToMany(mappedBy = "subCategory")
   private List<Materials> materials;
 
-  public String getCategory() {
-    return category.getName();
+  public Long getCategory() {
+    return category.getId();
   }
 }

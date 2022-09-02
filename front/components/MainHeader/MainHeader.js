@@ -11,6 +11,7 @@ import Link from 'next/link'
 import axios from "axios"
 import { server } from "../../config"
 import ConfirmModal from "../ConfirmModal/ConfirmModal"
+import { categoryMaterials, firstLoadMaterials } from "../../actions/MaterialsActions"
 
 const MainHeader = () => {
   const dispatch = useDispatch()
@@ -45,7 +46,7 @@ const MainHeader = () => {
 
   return (
     <Header className={styles.header}>
-      <Link className={styles.logo} href="/"><h1 className={styles.logo}>
+      <Link className={styles.logo} href="/"><h1 className={styles.logo} onClick={() => dispatch(firstLoadMaterials())}>
         Интернетный магазин
       </h1></Link>
       {/* <MainMenu className={styles.mainMenu}/> */}

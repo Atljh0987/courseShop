@@ -22,8 +22,7 @@ public class UsersService {
   @Autowired
   public UsersService(UsersRepository usersRepository) {
     this.usersRepository = usersRepository;
-  }
-  
+  }  
   
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public List<Users> getAll() {

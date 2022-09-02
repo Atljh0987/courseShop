@@ -26,10 +26,12 @@ public class Materials {
   private long id;
   
   @Getter(AccessLevel.NONE)
+  @Setter(AccessLevel.NONE)
   @ManyToOne
   private Categories category;
   
   @Getter(AccessLevel.NONE)
+  @Setter(AccessLevel.NONE)
   @ManyToOne
   private SubCategories subCategory;
 
@@ -39,6 +41,14 @@ public class Materials {
 
   public Long getSubCategory() {
     return subCategory.getId();
+  }
+  
+  public void addCaterory(Categories category) {
+    this.category = category;
+  }
+  
+  public void addSubCategory(SubCategories subCategory) {
+    this.subCategory = subCategory;
   }
   
   private String name;

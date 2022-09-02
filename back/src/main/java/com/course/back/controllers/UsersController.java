@@ -18,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,17 +53,15 @@ public class UsersController {
   
   @PutMapping("/edit")
   public String editUser(
-          @RequestParam String username,
-          @RequestParam int id,
-          @RequestParam String email,
+          @ModelAttribute Users user, 
           @RequestParam int role,
-          @RequestParam int confirmed          
+          BindingResult bindingResult
   ) {
-    Users user = usersService.getUserById(id);
-    user.setEmail(email);
-    user.setConfirmed(confirmed);
-    user.setUsername(username);
     user.addRole(rolesService.getRoleById(role));
+    usersValidator.validate(user, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new net.minidev.json.JSONObject(Map.of("successEdit", false, "message", bindingResult.getAllErrors())).toJSONString();
     
     try {
       usersService.saveUser(user);

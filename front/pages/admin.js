@@ -13,7 +13,8 @@ import React, { useEffect, useState } from 'react';
 import styles from '../css/AdminPage.module.css'
 import UserControl from "../components/AdminComponents/UserControl/UserControl";
 import { useDispatch, useSelector } from "react-redux";
-import CategoriesControl from "../components/AdminComponents/GoodsControl/CategoriesControl/CategoriesContol";
+import CategoriesControl from "../components/AdminComponents/GoodsControl/CategoriesControl/CategoriesControl";
+import SubCategoriesControl from "../components/AdminComponents/GoodsControl/SubCategoriesControl/SubCategoriesControl";
 import { pageSwitcher, usersActions, rolesAction } from "../actions/AdminActions";
 import Link from "next/link";
 const { Header, Content, Footer, Sider } = Layout;
@@ -59,13 +60,18 @@ function choosePage(page) {
   switch(page) {
     case '/user': return <UserControl/>
     case '/Categories': return <CategoriesControl/>
+    case '/SubCategories': return <SubCategoriesControl />
     default: return <UserControl/>
   }
 }
 
 const items = [
   getItem('Пользователи', 'users', <PieChartOutlined />),
-  getItem('Товары', 'Categories', <DesktopOutlined />),
+  getItem('Товары', 'materialsShower', <DesktopOutlined />, [
+    getItem('Категории', 'Categories', <PieChartOutlined />),
+    getItem('Подкатегории', 'SubCategories', <PieChartOutlined />),
+    getItem('Товары', 'materials', <PieChartOutlined />),
+  ]),
 ];
 
 const Admin = ({data}) => {

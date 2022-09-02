@@ -7,22 +7,22 @@ import MainFooter from "../components/MainFooter/MainFooter";
 import MainHeader from "../components/MainHeader/MainHeader";
 import { server } from "../config";
 
-export async function getServerSideProps() {
-  try {
-    const res = await fetch(server.back + '/api/materials/all')
-    const data = await res.json()
-    return { props: { data } }
-  } catch(err) {
-    console.log(err)
-    message.error(err.message)
-    return { props: { data: []} }
-  }  
-}
+// export async function getServerSideProps() {
+//   try {
+//     const res = await fetch(server.back + '/api/materials/all')
+//     const data = await res.json()
+//     return { props: { data } }
+//   } catch(err) {
+//     console.log(err)
+//     message.error(err.message)
+//     return { props: { data: []} }
+//   }  
+// }
 
-const Index = ({data}) => {  
+const Index = () => {  
   return <Layout style={{minHeight: "100vh"}}>
           <MainHeader/>
-          <MainContent data={data}/>
+          <MainContent/>
           <MainFooter/>
         </Layout>;
 }

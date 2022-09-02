@@ -6,6 +6,7 @@ import { materialsReducer } from './MaterialsReducer'
 import { authModalReducer, authReducer, confirmedModalReducer } from './AuthReducer'
 import { goToPageReducer, rolesDataReducer, usersDataReducer } from './AdminReducer'
 import { allCategories } from './CategoriesReducer'
+import { allSubCategories } from './SubCategoriesReducer'
 
 // COMBINED REDUCERS
 const reducers = {
@@ -20,7 +21,8 @@ const reducers = {
   adminGoToPage: goToPageReducer,
   usersData: usersDataReducer,
   rolesData: rolesDataReducer,
-  categories: allCategories
+  categories: allCategories,
+  subcategories: allSubCategories
 }
 
 export default combineReducers(reducers)
