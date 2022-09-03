@@ -51,7 +51,7 @@ const MainHeader = () => {
       </h1></Link>
       {/* <MainMenu className={styles.mainMenu}/> */}
       <Menu 
-        onClick={({key}) => dispatch(categoryMaterials("/materials/subcategory/" + key))} 
+        onClick={({key}) => dispatch(categoryMaterials("/material/subcategory/" + key))} 
         theme='dark' 
         className={styles.menu} 
         mode="horizontal" 

@@ -102,3 +102,19 @@ export const controlMenu = (state = controlInit, {type, payload}) => {
       return state
   }
 }
+
+const initStateMaterials = {
+  loading: false,
+  data: []
+}
+
+export const allMaterials = (state = initStateMaterials, {type, payload}) => {
+  switch(type) {
+    case types.ALLMATERIALS:
+      return state = payload
+    case types.SAVEEDITEDMATERIALS:
+      return state
+    default: 
+      return state
+  }
+}

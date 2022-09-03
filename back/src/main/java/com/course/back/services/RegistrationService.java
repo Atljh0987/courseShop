@@ -40,11 +40,7 @@ public class RegistrationService {
   }
   
   public int countUsersByEmail(String email) {
-    Users user = usersRepository.findByEmail(email);
-    if(user != null)
-      return 1;
-    else
-      return 0;
+    return usersRepository.findByEmail(email).stream().toList().size();
   }
   
   

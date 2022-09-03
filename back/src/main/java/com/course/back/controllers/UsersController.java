@@ -8,6 +8,7 @@ import com.course.back.model.Users;
 import com.course.back.services.RegistrationService;
 import com.course.back.services.RolesService;
 import com.course.back.services.UsersService;
+import com.course.back.validator.EditUserValidator;
 import com.course.back.validator.UsersValidator;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.List;
@@ -38,6 +39,9 @@ public class UsersController {
   RolesService rolesService;
   
   @Autowired
+  EditUserValidator editUserValidator;
+  
+  @Autowired
   UsersValidator usersValidator;
   
   @Autowired
@@ -58,7 +62,7 @@ public class UsersController {
           BindingResult bindingResult
   ) {
     user.addRole(rolesService.getRoleById(role));
-    usersValidator.validate(user, bindingResult);
+    editUserValidator.validate(user, bindingResult);
     
     if(bindingResult.hasErrors())
       return new net.minidev.json.JSONObject(Map.of("successEdit", false, "message", bindingResult.getAllErrors())).toJSONString();

@@ -15,6 +15,7 @@ import UserControl from "../components/AdminComponents/UserControl/UserControl";
 import { useDispatch, useSelector } from "react-redux";
 import CategoriesControl from "../components/AdminComponents/GoodsControl/CategoriesControl/CategoriesControl";
 import SubCategoriesControl from "../components/AdminComponents/GoodsControl/SubCategoriesControl/SubCategoriesControl";
+import MaterialsControl from "../components/AdminComponents/GoodsControl/MaterialsControl/MaterialsControl";
 import { pageSwitcher, usersActions, rolesAction } from "../actions/AdminActions";
 import Link from "next/link";
 const { Header, Content, Footer, Sider } = Layout;
@@ -61,6 +62,7 @@ function choosePage(page) {
     case '/user': return <UserControl/>
     case '/Categories': return <CategoriesControl/>
     case '/SubCategories': return <SubCategoriesControl />
+    case '/Materials': return <MaterialsControl />
     default: return <UserControl/>
   }
 }
@@ -70,7 +72,7 @@ const items = [
   getItem('Товары', 'materialsShower', <DesktopOutlined />, [
     getItem('Категории', 'Categories', <PieChartOutlined />),
     getItem('Подкатегории', 'SubCategories', <PieChartOutlined />),
-    getItem('Товары', 'materials', <PieChartOutlined />),
+    getItem('Товары', 'Materials', <PieChartOutlined />),
   ]),
 ];
 

@@ -28,6 +28,10 @@ public class SubCategoriesService {
     return subCategoriesRepository.findAll();
   }
   
+  public List<SubCategories> getByCategoryId(int id) {
+    return subCategoriesRepository.findByCategoryId(Long.valueOf(id)).stream().toList();
+  }
+  
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void save(SubCategories subCategory) {
     subCategoriesRepository.save(subCategory);

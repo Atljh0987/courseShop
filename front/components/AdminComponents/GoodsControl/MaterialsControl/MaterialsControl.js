@@ -5,8 +5,10 @@ import _ from 'lodash';
 import axios from 'axios';
 import { server } from '../../../../config';
 import * as types from '../../../../types'
-import { subCategoriesActions } from '../../../../actions/subCategoriesActions';
+import { materialsActions } from '../../../../actions/MaterialsActions';
 import { categoriesActions } from '../../../../actions/CategoriesActions';
+import { subCategoriesActions } from '../../../../actions/subCategoriesActions';
+import TextArea from 'antd/lib/input/TextArea';
 
 const EditableContext = React.createContext(null);
 
@@ -68,7 +70,7 @@ const EditableCell = ({
         rules={[
           {
             required: true,
-            message: `${title} is required.`,
+            message: `${title} необходимо.`,
           },
         ]}
       >
@@ -90,24 +92,29 @@ const EditableCell = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-const SubCategoriesControl = ({data}) => {
+const MaterialsControl = ({data}) => {
   const dispatch = useDispatch()
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [visibleEdit, setVisibleEdit] = useState(false)
   const [addLoading, setAddLoading] = useState(false)
-  const dataSource = useSelector((state) => state.subcategories.data)
+  const subCategories = useSelector((state) => state.subcategories.data)
+  const [subCategoriesAdd, setSubCategoriesAdd] = useState(subCategories)
+  const dataSource = useSelector((state) => state.materialsAdmin.data)
   const categories = useSelector((state) => state.categories.data)
+  const [form] = Form.useForm();
+  
 
   useEffect(() => {
-    dispatch(subCategoriesActions('getAll'))
+    dispatch(materialsActions('getAll'))
     dispatch(categoriesActions('getAll'))
+    dispatch(subCategoriesActions('getAll'))
   }, [dispatch])
 
   const handleDelete = (id) => {
-    axios.delete(server.back + '/api/subcategory/delete', { headers: {'Content-Type': 'application/x-www-form-urlencoded', 'id': id}}, { withCredentials: true }).then(res => {
+    axios.delete(server.back + '/api/material/delete', { headers: {'Content-Type': 'application/x-www-form-urlencoded', 'id': id}}, { withCredentials: true }).then(res => {
       if(res.data.successDelete) {
         message.success(res.data.message)
-        dispatch(subCategoriesActions('getAll'))  
+        dispatch(materialsActions('getAll'))  
       } else {
         message.error(res.data.message)
       }          
@@ -128,19 +135,62 @@ const SubCategoriesControl = ({data}) => {
       editable: true,
     },
     {
+      title: 'Описание',
+      dataIndex: 'description',
+      width: '30%',
+      editable: true,
+      render: (_, record) => {return <TextArea value={record.description}/>}
+    },
+    {
+      title: 'Цена',
+      dataIndex: 'price',
+      width: '30%',
+      editable: true,
+    },
+    {
+      title: 'Количество',
+      dataIndex: 'count',
+      width: '30%',
+      editable: true,
+    },
+    {
       title: 'Категория',
       dataIndex: 'category',
-      render: (res,record) => (
+      render: (_,record) => (
         <Select
           defaultValue={record.categories[record.categories.findIndex(e => e.id === record.category)].name}
           style={{
             width: 250,
           }}
-          onSelect={(val, opt) => {record.categorySelect = val}}
+          onSelect={(val, opt) => 
+            {
+              record.categorySelect = val
+              categoryClick(val)
+            }
+          }
         >
           {
             categories.map(category => {
               return <Select.Option key= {category.key} value={category.key}>{category.name}</Select.Option>;
+            })            
+          }
+        </Select>
+      )
+    },
+    {
+      title: 'Подкатегория',
+      dataIndex: 'subCategory',
+      render: (_,record) => (
+        <Select
+          defaultValue={record.subCategories[record.subCategories.findIndex(e => e.id === record.subCategory)].name}
+          style={{
+            width: 250,
+          }}
+          onSelect={(val, opt) => {record.subCategorySelect = val}}
+        >
+          {
+            record.subCategories.filter(e => e.category === record.category).map(subCategory => {
+              return <Select.Option key= {subCategory.key} value={subCategory.key}>{subCategory.name}</Select.Option>;
             })
           }
         </Select>
@@ -161,22 +211,29 @@ const SubCategoriesControl = ({data}) => {
       dataIndex: 'delete',
       render: (_, record) =>
         dataSource.length >= 1 ? (
-          <Popconfirm title="Удалить подкатегорию?" onConfirm={() => handleDelete(record.key)}>
+          <Popconfirm title="Удалить товар?" onConfirm={() => handleDelete(record.key)}>
             <a>Удалить</a>
           </Popconfirm>
         ) : null,
     },
   ];
 
-  const saveChanges = (subcategory) => {
+  const saveChanges = (material) => {
     const params = new URLSearchParams()
-    params.append('id', subcategory.key)
-    params.append('name', subcategory.name)
-    params.append('categoryId', subcategory.categorySelect)
+    params.append('id', material.key)
+    params.append('name', material.name)
+    params.append('category', material.categorySelect)
+    params.append('subcategory', material.subCategorySelect)
+    params.append('price', material.price)
+    params.append('count', material.count)
 
-    axios.put(server.back + '/api/subcategory/edit', params).then(res => {
-      dispatch(subcategoriesActions('saveEditsubcategory', subcategory))
-      message.success(res.data.message)
+    axios.put(server.back + '/api/material/edit', params).then(res => {
+      if(res.data.successEdit) {
+        dispatch(materialsActions('saveEditmaterial', material))
+        message.success(res.data.message)
+      } else {
+        message.error(res.data.message)
+      }
     }).catch(err => {
       message.error(err.message)
     })
@@ -187,7 +244,7 @@ const SubCategoriesControl = ({data}) => {
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
-    dispatch(subcategoriesActions('editsubcategory', newData));
+    dispatch(materialsActions('editmaterial', newData));
   };
 
   const components = {
@@ -213,15 +270,19 @@ const SubCategoriesControl = ({data}) => {
     };
   });
 
-  const addsubcategory = (subcategory, ewr, rwe ,rew) => {
+  const addmaterial = (material) => {
     setAddLoading(true)
     const params = new URLSearchParams()
-    params.append('name', subcategory.name)
-    params.append('category', subcategory.category)
+    params.append('name', material.name)
+    params.append('category', material.category)
+    params.append('subcategory', material.subcategory)
+    params.append('price', Number(material.price))
+    params.append('count', Number(material.count))
+    params.append('description', material.description)
 
-    axios.put(server.back + '/api/subcategory/add', params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
+    axios.put(server.back + '/api/material/add', params, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }, { withCredentials: true }).then(res => {
       setAddLoading(false)
-      dispatch(subCategoriesActions('getAll'))
+      dispatch(materialsActions('getAll'))
       if(res.data.successSave) {
         message.success(res.data.message)
         setVisibleAdd(false)
@@ -241,21 +302,27 @@ const SubCategoriesControl = ({data}) => {
     })
   }
 
+  const categoryClick = (id) => {  
+    form.resetFields(['subcategory'])  
+    setSubCategoriesAdd(subCategories.filter(e => e.category === id))
+  }
+
   return (
     <div>
       <Modal
-        title="Добавить подкатегорию"
+        title="Добавить товар"
         visible={visibleAdd}
         // onOk={handleOk}
         confirmLoading={addLoading}
         onCancel={() => setVisibleAdd(false)}
         footer={[
           <Button key="cancel" onClick={() => setVisibleAdd(false)}>Отмена</Button>,
-          <Button key="submit" type="primary" htmlType="submit" form="addsubcategory">Создать</Button>
+          <Button key="submit" type="primary" htmlType="submit" form="addmaterial">Создать</Button>
         ]}
       >
         <Form
-          id="addsubcategory"
+          form={form}
+          id="addmaterial"
           labelCol={{
             span: 4,
           }}
@@ -263,7 +330,7 @@ const SubCategoriesControl = ({data}) => {
             span: 14,
           }}
           layout="horizontal"
-          onFinish={addsubcategory}
+          onFinish={addmaterial}
         >
           <Form.Item 
             label="Название" 
@@ -277,6 +344,30 @@ const SubCategoriesControl = ({data}) => {
           >
             <Input />
           </Form.Item>
+          <Form.Item 
+            label="Цена" 
+            name="price"
+            rules={[
+              {
+                required: true,
+                message: 'Необходимо указать цену!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item 
+            label="Количество" 
+            name="count"
+            rules={[
+              {
+                required: true,
+                message: 'Необходимо ввести количество!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
           <Form.Item label="Категория" name="category"
             rules={[
               {
@@ -285,7 +376,7 @@ const SubCategoriesControl = ({data}) => {
               },
             ]}
           >
-            <Select>
+            <Select onSelect={categoryClick}>
               {
                 categories.length >= 1 ? (
                   categories.map(category => {
@@ -294,6 +385,36 @@ const SubCategoriesControl = ({data}) => {
                 ) : null
               }
             </Select>
+          </Form.Item>
+          <Form.Item label="Подкатегория" name="subcategory"
+            rules={[
+              {
+                required: true,
+                message: 'Необходимо выбрать подкатегорию!',
+              },
+            ]}
+          >
+            <Select>
+              {
+                subCategoriesAdd.length >= 1 ? (
+                  subCategoriesAdd.map(subCategory => {
+                    return <Select.Option key={subCategory.key} value={subCategory.key}>{subCategory.name}</Select.Option>
+                  })
+                ) : null
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item 
+            label="Описание" 
+            name="description"
+            rules={[
+              {
+                required: true,
+                message: 'Необходимо описание!',
+              },
+            ]}
+          >
+            <TextArea />
           </Form.Item>
         </Form>
       </Modal>
@@ -304,7 +425,7 @@ const SubCategoriesControl = ({data}) => {
           marginBottom: 16,
         }}
       >
-        Добавить подкатегорию
+        Добавить товар
       </Button>
       <Table
         components={components}
@@ -317,4 +438,4 @@ const SubCategoriesControl = ({data}) => {
   );
 }
 
-export default SubCategoriesControl
+export default MaterialsControl

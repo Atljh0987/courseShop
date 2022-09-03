@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Admin
  */
 @RestController
-@RequestMapping("/materials")
+@RequestMapping("/material")
 public class MaterialsController {
 //  @Autowired
 //  MaterialsToSiteService materialsToSiteService;
@@ -62,9 +63,9 @@ public class MaterialsController {
   }
   
   @PutMapping("/edit")
-  public String edit(@ModelAttribute Materials materials, @RequestParam int categoryId, @RequestParam int subCategoryId, BindingResult bindingResult) {
-    materials.addCaterory(categoriesService.getById(categoryId));
-    materials.addSubCategory(subCategoriesService.getById(subCategoryId));
+  public String edit(@ModelAttribute Materials materials, @RequestParam int category, @RequestParam int subcategory, BindingResult bindingResult) {
+    materials.addCaterory(categoriesService.getById(category));
+    materials.addSubCategory(subCategoriesService.getById(subcategory));
     try {
       materialsService.add(materials);
       return new JSONObject(Map.of("successEdit", true, "message", "Товар успешно отредактирован")).toJSONString();
@@ -74,19 +75,19 @@ public class MaterialsController {
   }
   
   @PutMapping("/add")
-  public String save(@ModelAttribute Materials materials, @RequestParam int categoryId, @RequestParam int subCategoryId, BindingResult bindingResult) {
-    materials.addCaterory(categoriesService.getById(categoryId));
-    materials.addSubCategory(subCategoriesService.getById(subCategoryId));
+  public String save(@ModelAttribute Materials materials, @RequestParam int category, @RequestParam int subcategory, BindingResult bindingResult) {
+    materials.addCaterory(categoriesService.getById(category));
+    materials.addSubCategory(subCategoriesService.getById(subcategory));
     try {
       materialsService.add(materials);
-      return new JSONObject(Map.of("successSave", true, "message", "Товар успешно отредактирован")).toJSONString();
+      return new JSONObject(Map.of("successSave", true, "message", "Товар успешно добавлен")).toJSONString();
     } catch(Exception ex) {
       return new JSONObject(Map.of("successSave", false, "message", ex.getMessage())).toJSONString();
     }
   }
   
   @DeleteMapping("/delete")
-  public String delete(int id) {
+  public String delete(@RequestHeader int id) {
     try {
       materialsService.delete(id);
       return new JSONObject(Map.of("successDelete", true, "message", "Товар успешно удален")).toJSONString();

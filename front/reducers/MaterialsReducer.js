@@ -11,3 +11,20 @@ export const materialsReducer = (state = [], { type, payload }) => {
         return state
     }
   }
+
+
+const initState = {
+  loading: false,
+  data: []
+}
+
+export const allMaterials = (state = initState, {type, payload}) => {
+  switch(type) {
+    case types.ALLMATERIALS:
+      return state = payload
+    case types.SAVEEDITEDMATERIALS:
+      return state
+    default: 
+      return state
+  }
+}

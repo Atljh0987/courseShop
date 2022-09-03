@@ -38,6 +38,18 @@ const getAllAction = () => {
   }
 }
 
+
+
+export const getSubcategoriesForCategory = (id) => {
+  return dispatch => {
+    axios.get(server.back + '/api/subcategory/allbycategoryid/' + id).then(res => {
+      dispatch({type: types.GETSUBCATEGORIESFORCATEGORY, payload: {loading: false, data: res.data}})
+    }).catch(err => {
+      console.log(err.message)
+    })
+  }
+}
+
 const saveEdited = (subcategory) => {  
   return dispatch => {
     if(subcategory) {

@@ -198,7 +198,7 @@ const UserControl = ({data}) => {
         dispatch(usersActions('saveEdited', user))
         message.success(res.data.message)
       } else {
-        message.error(res.data.message)
+        res.data.message.forEach(e => message.warning(e.defaultMessage))
       }      
     }).catch(err => {
       message.error(err.message)

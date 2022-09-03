@@ -36,7 +36,7 @@ public class UsersService {
   }
   
   public Users getUserByEmail(String email) {
-    return usersRepository.findByEmail(email);
+    return usersRepository.findByEmail(email).stream().toList().get(0);
   }
   
   public Users getUserById(int id) {

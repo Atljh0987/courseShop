@@ -6,7 +6,7 @@ import MainFooter from '../../../components/MainFooter/MainFooter'
 import { server } from "../../../config";
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(server.back + '/api/materials/category/' + params.id)
+  const res = await fetch(server.back + '/api/material/category/' + params.id)
   const data = await res.json()
 
   return { props: { data } }

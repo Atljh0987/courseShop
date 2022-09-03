@@ -40,6 +40,11 @@ public class SubCategoriesController {
     return subCategoriesService.getAll();
   }
   
+  @GetMapping("/allbycategoryid/{id}")
+  public List<SubCategories> getAllByCategory(@RequestParam int id) {
+    return subCategoriesService.getByCategoryId(id);
+  }
+  
   @PutMapping("/edit")
   public String edit(@ModelAttribute SubCategories subCategories, @RequestHeader int category, BindingResult bindingResult) {
     Categories catetory = categoriesService.getById(category);
