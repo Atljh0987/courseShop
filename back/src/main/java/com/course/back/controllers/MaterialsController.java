@@ -9,6 +9,7 @@ import com.course.back.model.Materials;
 import com.course.back.services.CategoriesService;
 import com.course.back.services.MaterialsService;
 import com.course.back.services.SubCategoriesService;
+import com.course.back.validator.MaterialsValidator;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,9 @@ public class MaterialsController {
   @Autowired
   MaterialsService materialsService;
   
+  @Autowired
+  MaterialsValidator materialsValidator;
+  
   @GetMapping("/groupsSubgroups")
   public List<Categories> getAllGroupsSubgrouops() {
     return categoriesService.getAll();
@@ -66,6 +70,12 @@ public class MaterialsController {
   public String edit(@ModelAttribute Materials materials, @RequestParam int category, @RequestParam int subcategory, BindingResult bindingResult) {
     materials.addCaterory(categoriesService.getById(category));
     materials.addSubCategory(subCategoriesService.getById(subcategory));
+    
+    materialsValidator.validate(materials, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new JSONObject(Map.of("successEdit", false, "message", bindingResult.getAllErrors())).toJSONString();
+    
     try {
       materialsService.add(materials);
       return new JSONObject(Map.of("successEdit", true, "message", "Товар успешно отредактирован")).toJSONString();
@@ -78,6 +88,12 @@ public class MaterialsController {
   public String save(@ModelAttribute Materials materials, @RequestParam int category, @RequestParam int subcategory, BindingResult bindingResult) {
     materials.addCaterory(categoriesService.getById(category));
     materials.addSubCategory(subCategoriesService.getById(subcategory));
+    
+    materialsValidator.validate(materials, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new JSONObject(Map.of("successSave", false, "message", bindingResult.getAllErrors())).toJSONString();
+    
     try {
       materialsService.add(materials);
       return new JSONObject(Map.of("successSave", true, "message", "Товар успешно добавлен")).toJSONString();

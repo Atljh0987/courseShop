@@ -172,11 +172,15 @@ const SubCategoriesControl = ({data}) => {
     const params = new URLSearchParams()
     params.append('id', subcategory.key)
     params.append('name', subcategory.name)
-    params.append('categoryId', subcategory.categorySelect)
+    params.append('category', subcategory.categorySelect)
 
     axios.put(server.back + '/api/subcategory/edit', params).then(res => {
-      dispatch(subcategoriesActions('saveEditsubcategory', subcategory))
-      message.success(res.data.message)
+      if(res.data.successEdit) {
+        dispatch(subCategoriesActions('saveEditsubcategory', subcategory))
+        message.success(res.data.message)
+      } else {
+        res.data.message.forEach(e => message.warning(e.defaultMessage))
+      }      
     }).catch(err => {
       message.error(err.message)
     })
@@ -187,7 +191,7 @@ const SubCategoriesControl = ({data}) => {
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
-    dispatch(subcategoriesActions('editsubcategory', newData));
+    dispatch(subCategoriesActions('editsubcategory', newData));
   };
 
   const components = {
@@ -213,7 +217,7 @@ const SubCategoriesControl = ({data}) => {
     };
   });
 
-  const addsubcategory = (subcategory, ewr, rwe ,rew) => {
+  const addsubcategory = (subcategory) => {
     setAddLoading(true)
     const params = new URLSearchParams()
     params.append('name', subcategory.name)

@@ -8,6 +8,7 @@ import com.course.back.model.Categories;
 import com.course.back.model.SubCategories;
 import com.course.back.services.CategoriesService;
 import com.course.back.services.SubCategoriesService;
+import com.course.back.validator.SubCategoryValidator;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,9 @@ public class SubCategoriesController {
   @Autowired
   CategoriesService categoriesService;
   
+  @Autowired
+  SubCategoryValidator subCategoryValidator;
+  
   @GetMapping("/all")
   public List<SubCategories> getAll() {
     return subCategoriesService.getAll();
@@ -46,12 +50,18 @@ public class SubCategoriesController {
   }
   
   @PutMapping("/edit")
-  public String edit(@ModelAttribute SubCategories subCategories, @RequestHeader int category, BindingResult bindingResult) {
+  public String edit(@ModelAttribute SubCategories subCategories, @RequestParam int category, BindingResult bindingResult) {
     Categories catetory = categoriesService.getById(category);
     subCategories.addCategory(catetory);
+    
+    subCategoryValidator.validate(subCategories, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new JSONObject(Map.of("successEdit", false, "message", bindingResult.getAllErrors())).toJSONString();
+    
     try {
       subCategoriesService.save(subCategories);
-      return new JSONObject(Map.of("successEdit", true, "message", "Категория успешно отредактирована")).toJSONString();
+      return new JSONObject(Map.of("successEdit", true, "message", "Подкатегория успешно отредактирована")).toJSONString();
     } catch(Exception ex) {
       return new JSONObject(Map.of("successEdit", false, "message", ex.getMessage())).toJSONString();
     }
@@ -61,9 +71,15 @@ public class SubCategoriesController {
   public String save(@ModelAttribute SubCategories subCategories, @RequestParam int category, BindingResult bindingResult) {
     Categories catetory = categoriesService.getById(category);
     subCategories.addCategory(catetory);
+    
+    subCategoryValidator.validate(subCategories, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new JSONObject(Map.of("successSave", false, "message", bindingResult.getAllErrors())).toJSONString();
+    
     try {
       subCategoriesService.save(subCategories);
-      return new JSONObject(Map.of("successSave", true, "message", "Категория успешно добавлена")).toJSONString();
+      return new JSONObject(Map.of("successSave", true, "message", "Подкатегория успешно добавлена")).toJSONString();
     } catch(Exception ex) {
       return new JSONObject(Map.of("successSave", false, "message", ex.getMessage())).toJSONString();
     }

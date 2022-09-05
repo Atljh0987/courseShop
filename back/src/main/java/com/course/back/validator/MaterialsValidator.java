@@ -11,43 +11,41 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import com.course.back.model.Materials;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import com.course.back.model.Materials;
+import com.course.back.services.CategoriesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
 /**
  *
  * @author Admin
  */
 @Component
-public class UsersValidator implements Validator {
+public class MaterialsValidator implements Validator {
   
-  private final RegistrationService registrationService;
-
   @Autowired
-  public UsersValidator(RegistrationService registrationService) {
-    this.registrationService = registrationService;
-  }
+  CategoriesService categoriesService;
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Users.class.equals(clazz);
+    return Materials.class.equals(clazz);
   }
 
   @Override
   public void validate(Object target, Errors errors) {
-    Users user = (Users)target;
+    Materials material = (Materials)target;    
     
-    
-    
-    if(registrationService.countUsersByEmail(user.getEmail()) > 0) {
+    if(categoriesService.containsSubcategory(material.getCategory(), material.getSubCategory())) {
       errors.rejectValue("category", "", "В этой категории такой подкатегории нет");
     }
-    
-    if(registrationService.countUsersByEmail(user.getEmail()) > 0) {
-      errors.rejectValue("email", "", "Такой email уже существует");
-    }
-    
-    if(registrationService.countUsersByName(user.getUsername()) > 0) {
-      errors.rejectValue("username", "", "Такое имя пользователя уже существует");
-    }
-    
     
   }
   

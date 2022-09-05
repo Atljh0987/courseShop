@@ -9,6 +9,7 @@ import { materialsActions } from '../../../../actions/MaterialsActions';
 import { categoriesActions } from '../../../../actions/CategoriesActions';
 import { subCategoriesActions } from '../../../../actions/subCategoriesActions';
 import TextArea from 'antd/lib/input/TextArea';
+const { Option, OptGroup } = Select;
 
 const EditableContext = React.createContext(null);
 
@@ -151,12 +152,11 @@ const MaterialsControl = ({data}) => {
       title: 'Количество',
       dataIndex: 'count',
       width: '30%',
-      editable: true,
     },
     {
       title: 'Категория',
       dataIndex: 'category',
-      render: (_,record) => (
+      render: (_,record, index) => (
         <Select
           defaultValue={record.categories[record.categories.findIndex(e => e.id === record.category)].name}
           style={{
@@ -180,17 +180,23 @@ const MaterialsControl = ({data}) => {
     {
       title: 'Подкатегория',
       dataIndex: 'subCategory',
-      render: (_,record) => (
+      render: (_,record, index) => (
         <Select
-          defaultValue={record.subCategories[record.subCategories.findIndex(e => e.id === record.subCategory)].name}
+          defaultValue={record.subCategoriesConst[record.subCategoriesConst.findIndex(e => e.id === record.subCategory)].name}
           style={{
             width: 250,
           }}
           onSelect={(val, opt) => {record.subCategorySelect = val}}
         >
           {
-            record.subCategories.filter(e => e.category === record.category).map(subCategory => {
-              return <Select.Option key= {subCategory.key} value={subCategory.key}>{subCategory.name}</Select.Option>;
+            record.categories.map(category => {
+              return <OptGroup label={category.name}>
+                {
+                  record.subCategories.filter(e => e.category === category.id).map(subCategory => {
+                    return <Option key={subCategory.id} value={subCategory.id}>{subCategory.name}</Option>
+                  })
+                }
+              </OptGroup>
             })
           }
         </Select>
@@ -232,7 +238,7 @@ const MaterialsControl = ({data}) => {
         dispatch(materialsActions('saveEditmaterial', material))
         message.success(res.data.message)
       } else {
-        message.error(res.data.message)
+        res.data.message.forEach(e => message.warning(e.defaultMessage))
       }
     }).catch(err => {
       message.error(err.message)

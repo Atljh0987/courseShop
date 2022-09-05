@@ -77,6 +77,7 @@ const getAllAction = () => {
               categorySelect: e.category,
               subCategory: e.subCategory,
               subCategories: subcategories.data,
+              subCategoriesConst: subcategories.data,
               subCategorySelect: e.subCategory
             }
           })

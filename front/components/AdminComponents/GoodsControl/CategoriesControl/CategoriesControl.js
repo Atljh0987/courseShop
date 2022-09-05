@@ -152,8 +152,12 @@ const CategoriesControl = ({data}) => {
     params.append('name', category.name)
 
     axios.put(server.back + '/api/category/edit', params).then(res => {
-      dispatch(categoriesActions('saveEditCategory', category))
-      message.success(res.data.message)
+      if(res.data.successEdit) {
+        dispatch(categoriesActions('saveEditCategory', category))
+        message.success(res.data.message)
+      } else {
+        res.data.message.forEach(e => message.warning(e.defaultMessage))
+      }
     }).catch(err => {
       message.error(err.message)
     })

@@ -28,6 +28,10 @@ public class CategoriesService {
     this.subCategoriesRepository = subCategoriesRepository;
   }
   
+  public Boolean containsSubcategory(Long categoryId, Long subcategoryId) {
+    return categoriesRepository.findById(categoryId).stream().toList().get(0).getSubCategories().stream().filter(e -> e.getId() == subcategoryId).findFirst().isEmpty();
+  }
+  
   public Categories getById(long id) {
     return categoriesRepository.getReferenceById(id);
   }  

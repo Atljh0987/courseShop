@@ -7,11 +7,13 @@ package com.course.back.controllers;
 import com.course.back.dto.CategoriesDTO;
 import com.course.back.model.Categories;
 import com.course.back.services.CategoriesService;
+import com.course.back.validator.CategoryValidator;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +36,9 @@ public class CategoriesController {
   @Autowired
   ModelMapper modelMapper;
   
+  @Autowired
+  CategoryValidator categoryValidator;
+  
   @GetMapping("/{id}")
   public String getCategoryById(@PathVariable long id) {
     return categoriesService.getById(id).getName();
@@ -45,7 +50,14 @@ public class CategoriesController {
   }
   
   @PutMapping("/edit")
-  public String editCategory(@ModelAttribute Categories categories) {    
+  public String editCategory(@ModelAttribute Categories categories,
+          BindingResult bindingResult) {    
+    
+    categoryValidator.validate(categories, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new JSONObject(Map.of("successEdit", false, "message", bindingResult.getAllErrors())).toJSONString();
+    
     try {
       categoriesService.addCategory(categories);
       return new JSONObject(Map.of("successEdit", true, "message", "Категория успешно отредактирована")).toJSONString();
@@ -55,7 +67,14 @@ public class CategoriesController {
   }
   
   @PutMapping("/add")
-  public String addCategory(@ModelAttribute Categories categories) {    
+  public String addCategory(@ModelAttribute Categories categories,
+          BindingResult bindingResult) {    
+    
+    categoryValidator.validate(categories, bindingResult);
+    
+    if(bindingResult.hasErrors())
+      return new JSONObject(Map.of("successAdd", false, "message", bindingResult.getAllErrors())).toJSONString();
+    
     try {
       categoriesService.addCategory(categories);
       return new JSONObject(Map.of("successAdd", true, "message", "Категория успешно добавлена")).toJSONString();
