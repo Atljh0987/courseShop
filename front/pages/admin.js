@@ -20,6 +20,7 @@ import { pageSwitcher, usersActions, rolesAction } from "../actions/AdminActions
 import Link from "next/link";
 const { Header, Content, Footer, Sider } = Layout;
 import * as types from '../types'
+import PhotoContol from "../components/AdminComponents/PhotoControl/PhotoControl";
 
 export async function getServerSideProps({req}) {
   
@@ -63,6 +64,7 @@ function choosePage(page) {
     case '/Categories': return <CategoriesControl/>
     case '/SubCategories': return <SubCategoriesControl />
     case '/Materials': return <MaterialsControl />
+    case '/Photo': return <PhotoContol />
     default: return <UserControl/>
   }
 }
@@ -74,6 +76,7 @@ const items = [
     getItem('Подкатегории', 'SubCategories', <PieChartOutlined />),
     getItem('Товары', 'Materials', <PieChartOutlined />),
   ]),
+  getItem('Фото товаров', 'Photo', <PieChartOutlined />),
 ];
 
 const Admin = ({data}) => {

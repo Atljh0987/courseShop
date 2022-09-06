@@ -16,3 +16,17 @@ export const allCategories = (state = initState, {type, payload}) => {
       return state
   }
 }
+
+const initTreeState = {
+  loading: false,
+  data: []
+}
+
+export const allCategoriesTree = (state = initTreeState, {type, payload}) => {
+  switch(type) {
+    case 'GETALLTREECATEGORY': 
+       return state = payload
+    default:
+      return state
+  }
+}

@@ -5,7 +5,7 @@ import { mainMenuReducer, controlMenu } from './MainMenuReducer'
 import { allMaterials, materialsReducer } from './MaterialsReducer'
 import { authModalReducer, authReducer, confirmedModalReducer } from './AuthReducer'
 import { goToPageReducer, rolesDataReducer, usersDataReducer } from './AdminReducer'
-import { allCategories } from './CategoriesReducer'
+import { allCategories, allCategoriesTree } from './CategoriesReducer'
 import { allSubCategories, subcategoriesFromCategory } from './SubCategoriesReducer'
 
 // COMBINED REDUCERS
@@ -24,7 +24,8 @@ const reducers = {
   categories: allCategories,
   subcategories: allSubCategories,
   materialsAdmin: allMaterials,
-  subFromCategory: subcategoriesFromCategory
+  subFromCategory: subcategoriesFromCategory,
+  allTreeCategory: allCategoriesTree
 }
 
 export default combineReducers(reducers)

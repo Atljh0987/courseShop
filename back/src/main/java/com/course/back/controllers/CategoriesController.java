@@ -5,6 +5,8 @@
 package com.course.back.controllers;
 
 import com.course.back.dto.CategoriesDTO;
+import com.course.back.dto.CategoriesTreeDTO;
+import com.course.back.dto.SubCategoriesTreeDTO;
 import com.course.back.model.Categories;
 import com.course.back.services.CategoriesService;
 import com.course.back.validator.CategoryValidator;
@@ -47,6 +49,11 @@ public class CategoriesController {
   @GetMapping("/all")
   public List<CategoriesDTO> getCategoriesAll() {
     return categoriesService.getAll().stream().map(e -> modelMapper.map(e, CategoriesDTO.class)).toList();
+  }
+  
+  @GetMapping("/allTree")
+  public List<CategoriesTreeDTO> getCategoriesAllTree() {
+    return categoriesService.getAll().stream().map(e -> modelMapper.map(e, CategoriesTreeDTO.class)).toList();
   }
   
   @PutMapping("/edit")
