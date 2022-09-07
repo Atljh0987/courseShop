@@ -3,9 +3,21 @@
   justify-content: space-between;
 }
 
+.actionContainer {
+  margin-bottom: 15px;
+  width: 600px;
+  overflow: scroll;
+}
+
 .radio {
   margin: 0 5px 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.cross {
+  width: 50px;
+  height: 50px;
+  /* color: #fff; */
 }

@@ -7,6 +7,7 @@ import { authModalReducer, authReducer, confirmedModalReducer } from './AuthRedu
 import { goToPageReducer, rolesDataReducer, usersDataReducer } from './AdminReducer'
 import { allCategories, allCategoriesTree } from './CategoriesReducer'
 import { allSubCategories, subcategoriesFromCategory } from './SubCategoriesReducer'
+import { freePhoto } from './PhotoReducer'
 
 // COMBINED REDUCERS
 const reducers = {
@@ -25,7 +26,8 @@ const reducers = {
   subcategories: allSubCategories,
   materialsAdmin: allMaterials,
   subFromCategory: subcategoriesFromCategory,
-  allTreeCategory: allCategoriesTree
+  allTreeCategory: allCategoriesTree,
+  freePhoto: freePhoto
 }
 
 export default combineReducers(reducers)

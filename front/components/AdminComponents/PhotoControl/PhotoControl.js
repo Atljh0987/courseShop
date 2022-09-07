@@ -1,18 +1,21 @@
 import styles from './PhotoContol.module.css'
-import { Button, Image, message, Modal, Radio, Skeleton, Tree, Upload  } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Radio, Skeleton, Tree, Upload  } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { InboxOutlined, DownOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoriesTreeActions } from '../../../actions/CategoriesTreeActions';
+import { server } from '../../../config';
+import { photoActions } from '../../../actions/PhotoActions';
 const { Dragger } = Upload;
 
 
 
 const ModalUpload = ({isModalOpen, setIsModalOpen}) => {
+  const dispatch = useDispatch()
   const props = {
     name: 'file',
     multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    action: server.back + '/api/photo/upload',
   
     onChange(info) {
       const { status } = info.file;
@@ -23,6 +26,7 @@ const ModalUpload = ({isModalOpen, setIsModalOpen}) => {
   
       if (status === 'done') {
         message.success(`${info.file.name} file uploaded successfully.`);
+        dispatch(photoActions('GETALLFREEPHOTO'))
       } else if (status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -68,112 +72,54 @@ const PhotoContolAdder = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const allCategories = useSelector(state => state.allTreeCategory.data)
   const loading = useSelector(state => state.allTreeCategory.loading)
+  const photoData = useSelector(state => state.freePhoto.data)
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     dispatch(categoriesTreeActions('getAllTree'))
+    dispatch(photoActions('GETALLFREEPHOTO'))
   }, [dispatch])
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
+  const deleteButton = (val) => {
+    console.log(val)
+  }
+
   return (
     <div>
-      <div style={{marginBottom: "15px", width: "50%", overflow: "scroll"}}>
-        <Radio.Group  buttonStyle="solid" onChange={(val) => console.log(val)} style={{display: "flex"}}>
-          <div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={1}/>
-          </div>
-          <div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div>
-          <div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div><div className={styles.radio}>
-            <Image
-                width={150}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-            <Radio value={2}/>
-          </div>
+      <div className={styles.actionContainer}>
+        <Radio.Group  onChange={(val) => console.log(val)} style={{display: "flex"}}>
+          {
+            photoData.map((e, i) => {
+              return <Form
+                labelCol={{
+                  span: 4,
+                }}
+                wrapperCol={{
+                  span: 14,
+                }}
+                layout="horizontal"
+                // onValuesChange={onFormLayoutChange}
+                // disabled={componentDisabled}
+              >
+                <Form.Item>
+                  <Image
+                    width={150}
+                    src={e.image}
+                  />
+                  {/* <Button onClick={deleteButton} danger>Удалить</Button> */}
+                </Form.Item>
+                <Form.Item style={{display: 'flex'}}>
+                  <Radio value={e.id} key={e.id}/>
+                  <Button onClick={() => console.log(e.id)}>Удалить</Button>
+                </Form.Item>
+              </Form>
+            })
+          }
+
         </Radio.Group>        
       </div>
     <div style={{marginBottom: "15px"}}>
@@ -202,7 +148,6 @@ const PhotoContol = () => {
   return <>
     <div className={styles.container}>
       <PhotoContolAdder/>
-      <h1>asdf</h1>
     </div>
   </>
 }
