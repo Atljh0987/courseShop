@@ -4,13 +4,16 @@
  */
 package com.course.back.controllers;
 
+import com.course.back.model.Materials;
 import com.course.back.model.Photo;
 import com.course.back.services.MaterialsService;
 import com.course.back.services.PhotoService;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.servlet.ServletContext;
 import org.apache.commons.io.FilenameUtils;
@@ -65,6 +68,11 @@ public class PhotoController {
     
   }
   
+  @GetMapping("/material/{id}")
+  public List<Photo> getMaterialPhoto(@PathVariable int id) {
+    return photoService.getPhotoByMaterial(id);
+  }
+  
   @GetMapping("/{fileName}")
   public HttpEntity<byte[]> getArticleImage(@PathVariable String fileName) throws IOException {
     byte[] image = Files.readAllBytes(new File(uploadsDir + fileName).toPath());
@@ -88,4 +96,21 @@ public class PhotoController {
     File file = new File(uploadsDir + photo.getImage());
     file.delete();
   }
+  
+  @PostMapping("/attach")
+  public String attach(@RequestParam List<Integer> photosId, @RequestParam int material) {
+    try {
+      Materials m = materialsService.getById(material);
+
+      for(Integer photo : photosId) {
+        Photo p = photoService.getById(photo);
+        p.setMaterial(m);
+        photoService.savePhoto(p);
+      }
+      
+      return new JSONObject(Map.of("success", true, "message", "Добавлено успешно")).toJSONString();
+    } catch(Exception e) {
+      return new JSONObject(Map.of("success", false, "message", e.getMessage())).toJSONString();
+    }
+  } 
 }

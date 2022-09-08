@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Admin
  */
-public interface PhotoRepository extends JpaRepository<Photo, Integer> {
-  List<Photo> findByMaterialIsNull();
+public interface PhotoRepository extends JpaRepository<Photo, Long> {
+  List<Photo> findByMaterialIdIsNull();
+  
+  List<Photo> findByMaterialId(Long id);
 }

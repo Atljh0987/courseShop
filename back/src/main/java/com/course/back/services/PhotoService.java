@@ -4,7 +4,9 @@
  */
 package com.course.back.services;
 
+import com.course.back.model.Materials;
 import com.course.back.model.Photo;
+import com.course.back.repositories.MaterialsRepository;
 import com.course.back.repositories.PhotoRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +31,18 @@ public class PhotoService {
   }
   
   public List<Photo> getFreePhotos() {
-    return photoRepository.findByMaterialIsNull();
+    return photoRepository.findByMaterialIdIsNull();
   }
   
   public Photo getById(int id) {
-    return photoRepository.findById(id).stream().toList().get(0);
+    return photoRepository.findById(Long.valueOf(id)).stream().toList().get(0);
   }
   
   public void delete(Photo photo) {
     photoRepository.delete(photo);
+  }
+  
+  public List<Photo> getPhotoByMaterial(int id) {
+    return photoRepository.findByMaterialId(Long.valueOf(id));
   }
 }

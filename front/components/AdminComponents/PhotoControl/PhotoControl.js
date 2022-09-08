@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { categoriesTreeActions } from '../../../actions/CategoriesTreeActions';
 import { server } from '../../../config';
 import { photoActions } from '../../../actions/PhotoActions';
+import axios from 'axios';
 const { Dragger } = Upload;
 
 
@@ -73,7 +74,9 @@ const PhotoContolAdder = () => {
   const allCategories = useSelector(state => state.allTreeCategory.data)
   const loading = useSelector(state => state.allTreeCategory.loading)
   const photoData = useSelector(state => state.freePhoto.data)
-  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [selectedMaterial, setSelectedMaterial] = useState('')
+  const [selectedMaterialId, setSelectedMaterialId] = useState(0)
 
   useEffect(() => {
     dispatch(categoriesTreeActions('getAllTree'))
@@ -84,8 +87,40 @@ const PhotoContolAdder = () => {
     setIsModalOpen(true);
   };
 
-  const deleteButton = (val) => {
-    console.log(val)
+  const deleteButton = (id) => {
+    axios.delete(server.back + '/api/photo/delete/' + id).then(() => {
+      if(selectedMaterial === '') {
+        dispatch(photoActions('GETALLFREEPHOTO'))   
+      } else {     
+        dispatch(photoActions('GETFORMATERIAL', selectedMaterialId))
+      }      
+    }).catch(err => {
+      message.error(err.message)
+    })
+  }
+
+  const selectMaterial = (id, name) => {
+    setSelectedMaterial(name)
+    setSelectedMaterialId(id)
+    dispatch(photoActions('GETFORMATERIAL', id))
+  }
+
+  const saveAll = () => {
+    const params = new URLSearchParams()
+    params.append('photosId', photoData.map(e => e.id))
+    params.append('material', selectedMaterialId)
+
+    axios.post(server.back + '/api/photo/attach', params).then(res => {
+      if(res.data.success) {
+        dispatch(photoActions('GETFORMATERIAL', selectedMaterialId))
+        message.success(res.data.message)
+      } else {
+        message.error(res.data.message)
+      }
+    }).catch(err => {
+      console.log(err)
+      message.error(err.message)
+    })
   }
 
   return (
@@ -114,7 +149,7 @@ const PhotoContolAdder = () => {
                 </Form.Item>
                 <Form.Item style={{display: 'flex'}}>
                   <Radio value={e.id} key={e.id}/>
-                  <Button onClick={() => console.log(e.id)}>Удалить</Button>
+                  <Button onClick={() => deleteButton(e.id)}>Удалить</Button>
                 </Form.Item>
               </Form>
             })
@@ -124,19 +159,26 @@ const PhotoContolAdder = () => {
       </div>
     <div style={{marginBottom: "15px"}}>
       <ModalUpload isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+      <Button type="primary" onClick={() => {        
+        setSelectedMaterial('')
+        dispatch(photoActions('GETALLFREEPHOTO'))
+      }}>
+        Непривязанные фото
+      </Button>
       <Button type="primary" onClick={showModal} style={{marginRight: "10px"}}>
         Загрузить фото
       </Button>
-      <Button type="primary" /*onClick={showModal}*/>
+      <Button type="primary" onClick={saveAll}>
         Сохранить
       </Button>
     </div>
     <div>
+      <h1>Выбранный товар: <span>{selectedMaterial}</span></h1>
       {loading? <Skeleton /> 
       : <Tree
         showLine
         switcherIcon={<DownOutlined />}
-        onSelect={() => console.log(123)}
+        onSelect={(val, e) => selectMaterial(Number(e.node.key.split("-")[2]), e.node.title)}
         treeData={allCategories}
       />}
       
