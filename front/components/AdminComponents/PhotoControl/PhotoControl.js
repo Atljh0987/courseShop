@@ -77,6 +77,7 @@ const PhotoContolAdder = () => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [selectedMaterial, setSelectedMaterial] = useState('')
   const [selectedMaterialId, setSelectedMaterialId] = useState(0)
+  let mainPhoto = -1
 
   useEffect(() => {
     dispatch(categoriesTreeActions('getAllTree'))
@@ -105,12 +106,15 @@ const PhotoContolAdder = () => {
     dispatch(photoActions('GETFORMATERIAL', id))
   }
 
-  const saveAll = () => {
+  const saveAll = (val) => {
     const params = new URLSearchParams()
     params.append('photosId', photoData.map(e => e.id))
     params.append('material', selectedMaterialId)
+    params.append('mainPhoto', mainPhoto)
+    
 
     axios.post(server.back + '/api/photo/attach', params).then(res => {
+      mainPhoto = -1
       if(res.data.success) {
         dispatch(photoActions('GETFORMATERIAL', selectedMaterialId))
         message.success(res.data.message)
@@ -120,15 +124,20 @@ const PhotoContolAdder = () => {
     }).catch(err => {
       console.log(err)
       message.error(err.message)
+      mainPhoto = -1
     })
   }
 
   return (
     <div>
       <div className={styles.actionContainer}>
-        <Radio.Group  onChange={(val) => console.log(val)} style={{display: "flex"}}>
+        <Radio.Group  onChange={(val) => mainPhoto = val.target.value} style={{display: "flex"}}>
           {
             photoData.map((e, i) => {
+              if(mainPhoto === -1) {
+                mainPhoto = e.id
+              }
+
               return <Form
                 labelCol={{
                   span: 4,

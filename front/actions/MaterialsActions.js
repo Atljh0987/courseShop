@@ -41,8 +41,6 @@ const categoryMaterialsSuccess = data => ({
   ]
 });
 
-
-
 // ************************* Admin
 
 export const materialsActions = (type, payload) => {

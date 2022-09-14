@@ -98,13 +98,14 @@ public class PhotoController {
   }
   
   @PostMapping("/attach")
-  public String attach(@RequestParam List<Integer> photosId, @RequestParam int material) {
+  public String attach(@RequestParam List<Integer> photosId, @RequestParam int material, @RequestParam int mainPhoto) {
     try {
       Materials m = materialsService.getById(material);
 
       for(Integer photo : photosId) {
         Photo p = photoService.getById(photo);
         p.setMaterial(m);
+        p.setMainPhoto((photo == mainPhoto)? 1 : 0);
         photoService.savePhoto(p);
       }
       

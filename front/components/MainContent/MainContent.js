@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useEffect } from "react";
 import { firstLoadMaterials } from "../../actions/MaterialsActions";
+import { server } from "../../config";
 const { Meta } = Card;
 
 let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -36,14 +37,20 @@ const MainContent = () => {
           return (
             <Link key={e.id} href={"/material/" + e.id}>
               <Card
-                style={{cursor: "pointer"}}
+                style={{cursor: "pointer", width: "250px"}}
                 // key={e.id}
                 className={styles.card}
                 cover={
-                  <img
-                    alt="example"
-                    src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                  />
+                  <div style={{width: "250px", height: "320px", overflow: "hidden"}}>
+                    <img                    
+                      alt="example"
+                      style={{width: "100%", height: "auto"}}
+                      // src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                      src={(e.photo.length > 0)? e.photo.filter(e => e.mainPhoto === 1).length === 0? server.back + "/api/photo/" + e.photo[0].image :
+                        server.back + "/api/photo/" + e.photo.filter(e => e.mainPhoto === 1)[0].image : 
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH2Hn4Sf0R9tFaYQcL5HKr35G6d-E6kcOMfo8JoZ0&s"}
+                    />
+                  </div>
                 }
                 actions={[<Button type="primary">В корзину</Button>]}
               >

@@ -230,6 +230,7 @@ const MaterialsControl = ({data}) => {
     params.append('name', material.name)
     params.append('category', material.categorySelect)
     params.append('subcategory', material.subCategorySelect)
+    params.append('description', material.description)
     params.append('price', material.price)
     params.append('count', material.count)
 

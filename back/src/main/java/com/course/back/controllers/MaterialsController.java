@@ -102,6 +102,11 @@ public class MaterialsController {
     }
   }
   
+  @GetMapping("/{id}")
+  public Materials getById(@PathVariable int id) {
+    return materialsService.getById(id);
+  }
+  
   @DeleteMapping("/delete")
   public String delete(@RequestHeader int id) {
     try {

@@ -18,7 +18,8 @@ const getAllFreePhoto = () => {
       const dto = data.map(e => {
         return {
           id: e.id,
-          image: server.back + '/api/photo/' + e.image
+          image: server.back + '/api/photo/' + e.image,
+          main: e.mainPhoto
         }
       })
       dispatch({type: 'GETALLFREEPHOTO', payload: {loading: false, data: dto }})
@@ -35,7 +36,8 @@ const getForMaterial = (id) => {
       const dto = data.map(e => {
         return {
           id: e.id,
-          image: server.back + '/api/photo/' + e.image
+          image: server.back + '/api/photo/' + e.image,
+          main: e.mainPhoto
         }
       })
       dispatch({type: 'GETFORMATERIAL', payload: {loading: false, data: dto }})

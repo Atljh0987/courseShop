@@ -4,6 +4,7 @@
  */
 package com.course.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,6 +62,7 @@ public class Materials {
   
   private int count;  
   
+//  @JsonIgnore
   @OneToMany(mappedBy = "material")
   private List<Photo> photo;
 }

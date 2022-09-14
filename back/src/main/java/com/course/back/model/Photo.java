@@ -26,11 +26,9 @@ public class Photo {
   
   private String image;
   
-//  @Getter(AccessLevel.NONE)
+  @Getter(AccessLevel.NONE)
   @ManyToOne
   private Materials material;
   
-//  public Long getMaterial() {
-//    return material.getId();
-//  }
+  private int mainPhoto;
 }
