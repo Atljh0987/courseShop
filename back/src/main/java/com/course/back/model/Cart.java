@@ -5,18 +5,16 @@
 package com.course.back.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -24,42 +22,17 @@ import lombok.Setter;
  */
 @Entity
 @Data
-public class Users { 
-  
+public class Cart {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   
-  private String username;
-  
-  private String email;
-  
-  private String password;
-  
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
   @ManyToOne
-  private Roles role;
-
-  public void addRole(Roles role) {
-    this.role = role;
-  }
-
-  public int getRole() {
-    return role.getId();
-  }
-  
-  public String getRoleName() {
-    return role.getName();
-  }
-  
-  private int confirmed;
+//  @JoinColumn(name = "materials_id")
+  private Materials material;
   
   @JsonIgnore
-  @OneToMany(mappedBy = "user")
-  private List<Cart> cart;
-  
-  @JsonIgnore
-  @OneToOne(mappedBy = "user")
-  private UserOrder order;
+  @ManyToOne
+//  @JoinColumn(name = "users_id")
+  private Users user;
 }

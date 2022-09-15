@@ -63,6 +63,7 @@ public class AuthController {
       Users user = usersService.getUserByEmail(u.getUsers().getEmail());
       return new JSONObject(Map.of(
               "isAuth", true, 
+              "userId", user.getId(),
               "username", user.getUsername(), 
               "role", u.getAuthorities().iterator().next().getAuthority(),
               "email", user.getEmail(),

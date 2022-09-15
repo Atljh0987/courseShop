@@ -2,6 +2,7 @@ import * as types from '../types'
 
 const authState = {
   isAuth: false,
+  userId: '',
   username: '',
   email: '',
   role: '',
@@ -12,6 +13,8 @@ export const authReducer = (state = authState, { type, payload }) => {
   switch (type) {
     case types.LOGIN:
       return state = payload
+    case types.LOGOUT:
+      return state = authState
     default:
       return state
   }

@@ -23,7 +23,7 @@ export const checkAccess = (link) => {
   return dispatch => {
     axios.get(server.back + "/api/" + link, { withCredentials: true }).then(res => {
       if(res.data.hasAccess === false) {
-        dispatch(openAuthModal('/orders'))
+        dispatch(openAuthModal('/' + link))
       } else {        
         Router.push('/' + link)
       }

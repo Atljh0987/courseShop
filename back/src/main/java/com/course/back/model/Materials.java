@@ -10,8 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -65,4 +67,8 @@ public class Materials {
 //  @JsonIgnore
   @OneToMany(mappedBy = "material")
   private List<Photo> photo;
+  
+  @JsonIgnore
+  @OneToMany(mappedBy = "material")
+  private List<Cart> cart;
 }

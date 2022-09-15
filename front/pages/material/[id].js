@@ -13,10 +13,7 @@ export async function getServerSideProps({params, req}) {
 
   try {
     const res = await axios.get(server.back + '/api/material/' + id, {
-      withCredentials: true,
-      headers: {
-        Cookie: req.headers.cookie
-      }
+      withCredentials: true
     })
     const material = res.data
     return { props: { success: true, material } }
@@ -27,9 +24,6 @@ export async function getServerSideProps({params, req}) {
 }
 
 const MaterialId = ({material}) => {
-  const router = useRouter()
-  const { id, price } = router.query
-
   return (
     <div>
       <MainHeader />
@@ -40,7 +34,7 @@ const MaterialId = ({material}) => {
             {
               material.photo.sort((a, b) => b.id - a.id).map(e => {
                 return (
-                  <div>
+                  <div key={e.id}>
                     <img src={server.back + '/api/photo/' + e.image}/>
                   </div>
                 )
