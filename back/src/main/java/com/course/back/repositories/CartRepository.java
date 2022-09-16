@@ -15,4 +15,9 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface CartRepository extends JpaRepository<Cart, Long> {
   List<Cart> findByUserId(long id);
+  
+  Cart findByUserIdAndMaterialId(long userId, long materialId);
+  
+  @Query("select coalesce(sum(c.count), 0) from Cart c join Users u on c.user = u.id where u.id = ?1")
+  int sumCount(long id);
 }

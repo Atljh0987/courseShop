@@ -27,8 +27,34 @@ public class CartService {
     return cartRepository.findByUserId(Long.valueOf(id));
   }
   
-  public void add(Cart cart) {
+  public int sumCount(int id) {
+    return cartRepository.sumCount(Long.valueOf(id));
+  }
+  
+  public Cart getByUserIdAndMaterialId(int userId, int materialId) {
+    return cartRepository.findByUserIdAndMaterialId(userId, materialId);
+  }
+  
+  public void count(int id, int count) {
+    Cart cart = cartRepository.findById(Long.valueOf(id)).stream().toList().get(0);
+    if(cart.getMaterial().getCount() > count) {
+      cart.setCount(count);      
+    } else {
+      cart.setCount(cart.getMaterial().getCount());
+    }
     cartRepository.save(cart);
+  }
+  
+  public void add(Cart cart) {
+    Cart current = cartRepository.findByUserIdAndMaterialId(cart.getUser().getId(), cart.getMaterial().getId());
+    if(current == null) {
+      cart.setCount(1);
+      cartRepository.save(cart);
+    } else {
+      if(current.getMaterial().getCount() > current.getCount())
+        current.setCount(current.getCount() + 1);
+      cartRepository.save(current);
+    }
   }
   
   public void delete(Cart cart) {

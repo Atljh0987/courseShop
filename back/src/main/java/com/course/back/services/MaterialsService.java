@@ -46,6 +46,10 @@ public class MaterialsService {
     return materialsRepository.findById(Long.valueOf(id)).stream().toList().get(0);
   }
   
+  public int getMaxCount(int id) {
+    return materialsRepository.findById(Long.valueOf(id)).stream().toList().get(0).getCount();
+  }
+  
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void add(Materials material) {
     materialsRepository.save(material);

@@ -11,12 +11,13 @@ import Link from 'next/link'
 import axios from "axios"
 import { server } from "../../config"
 import ConfirmModal from "../ConfirmModal/ConfirmModal"
-import { categoryMaterials, firstLoadMaterials } from "../../actions/MaterialsActions"
+import { categoryMaterials, firstLoadMaterials, getCountAction } from "../../actions/MaterialsActions"
 
 const MainHeader = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(loadMenu())
+    dispatch(getCountAction())
     dispatch(loadControlMenu())
     dispatch(checkLogin())
   }, [dispatch])
@@ -26,6 +27,7 @@ const MainHeader = () => {
 
   const onLogout = () => {
     axios.get(server.back + "/api/logout", { withCredentials: true }).then(() => {
+      dispatch(getCountAction())
       dispatch(logout())
     }).catch(err => {
       message.error(err.message)

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { timerReducer } from './timeResucer'
 import { counterReducer } from './counterReducer'
 import { mainMenuReducer, controlMenu } from './MainMenuReducer'
-import { allMaterials, materialsReducer } from './MaterialsReducer'
+import { allMaterials, count, materialsReducer } from './MaterialsReducer'
 import { authModalReducer, authReducer, confirmedModalReducer } from './AuthReducer'
 import { goToPageReducer, rolesDataReducer, usersDataReducer } from './AdminReducer'
 import { allCategories, allCategoriesTree } from './CategoriesReducer'
@@ -27,7 +27,8 @@ const reducers = {
   materialsAdmin: allMaterials,
   subFromCategory: subcategoriesFromCategory,
   allTreeCategory: allCategoriesTree,
-  freePhoto: freePhoto
+  freePhoto: freePhoto,
+  count: count
 }
 
 export default combineReducers(reducers)

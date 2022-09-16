@@ -66,6 +66,11 @@ public class MaterialsController {
     return materialsService.getBySubCategory(id);
   }
   
+  @GetMapping("/count/{id}")
+  public int getMaterialCount(@PathVariable int id) {
+    return materialsService.getMaxCount(id);
+  }
+  
   @PutMapping("/edit")
   public String edit(@ModelAttribute Materials materials, @RequestParam int category, @RequestParam int subcategory, BindingResult bindingResult) {
     materials.addCaterory(categoriesService.getById(category));

@@ -4,13 +4,11 @@ import styles from "./MainContent.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useEffect } from "react";
-import { firstLoadMaterials } from "../../actions/MaterialsActions";
+import { firstLoadMaterials, getCountAction } from "../../actions/MaterialsActions";
 import { server } from "../../config";
 import axios from "axios";
 import { openAuthModal } from "../../actions/AuthAction";
 const { Meta } = Card;
-
-let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const MainContent = () => {
   const dispatch = useDispatch()
@@ -27,9 +25,10 @@ const MainContent = () => {
     params.append("user", userId)
 
     if(userId) {
-      axios.put(server.back + '/api/cart/add',params).then(res => {
+      axios.put(server.back + '/api/cart/add', params).then(res => {
         if(res.data.success) {
           message.success(res.data.message)
+          dispatch(getCountAction())
         } else {
           message.error(res.data.message)
         }

@@ -1,7 +1,7 @@
 import { ControlOutlined, LoginOutlined, MailOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useDispatch } from 'react-redux'
-import { categoryMaterials } from '../actions/MaterialsActions'
+import { categoryMaterials, getCountAction } from '../actions/MaterialsActions'
 import { server } from '../config'
 import * as types from '../types'
 
@@ -46,8 +46,6 @@ export const mainMenuReducer = (state = initState, { type, payload }) => {
     }
   }
 
-const count = 0;
-
 const controlInit = [
   {
     label: 'Войти',
@@ -60,7 +58,7 @@ const controlInit = [
     icon: <ShoppingOutlined />
   },
   {
-    label: "Корзина: " + count,
+    label: "Корзина: " + 0,
     key: 'cart',
     icon: <ShoppingCartOutlined />
   },
@@ -98,6 +96,15 @@ export const controlMenu = (state = controlInit, {type, payload}) => {
       }
     case types.LOGOUT:
       state = controlInit
+    case types.CARTCOUNT:
+      const stateChangeCount = Array.from(state)
+      stateChangeCount[stateChangeCount.findIndex(e => e.key === 'cart')] = {
+        label: "Корзина: " + payload ?? 0,
+        key: 'cart',
+        icon: <ShoppingCartOutlined />
+      }
+
+      state = stateChangeCount
     default:
       return state
   }

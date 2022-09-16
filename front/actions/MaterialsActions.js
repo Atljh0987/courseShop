@@ -2,6 +2,8 @@ import axios from 'axios'
 import * as types from '../types'
 import { message } from 'antd'
 import { server } from '../config'
+import { count } from '../reducers/MaterialsReducer'
+import { controlMenu } from '../reducers/MainMenuReducer'
 
 export const firstLoadMaterials = () => {  
   return dispatch => {
@@ -42,6 +44,22 @@ const categoryMaterialsSuccess = data => ({
 });
 
 // ************************* Admin
+
+export const getCountAction = () => {
+  return dispatch => {
+    axios.get(server.back + '/api/auth/check', {
+      withCredentials: true
+    }).then(res => {
+      const userId = res.data.userId
+      if(userId) {
+        axios.get(server.back + '/api/cart/count/all/' + userId).then(res2 => {
+          dispatch({type: types.CARTCOUNT, payload: res2.data})
+        })
+      }      
+    })
+    
+  }
+}
 
 export const materialsActions = (type, payload) => {
   return dispatch => {

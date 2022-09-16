@@ -35,4 +35,6 @@ public class Cart {
   @ManyToOne
 //  @JoinColumn(name = "users_id")
   private Users user;
+  
+  private int count;
 }

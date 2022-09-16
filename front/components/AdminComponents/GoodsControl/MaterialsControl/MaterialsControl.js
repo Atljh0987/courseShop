@@ -127,17 +127,20 @@ const MaterialsControl = ({data}) => {
   const defaultColumns = [
     {
       title: 'Id',
-      dataIndex: 'key'
+      dataIndex: 'key',
+      key: 'key'
     },
     {
       title: 'Название',
       dataIndex: 'name',
+      key: 'name',
       width: '30%',
       editable: true,
     },
     {
       title: 'Описание',
       dataIndex: 'description',
+      key: 'description',
       width: '30%',
       editable: true,
       render: (_, record) => {return <TextArea value={record.description}/>}
@@ -145,17 +148,21 @@ const MaterialsControl = ({data}) => {
     {
       title: 'Цена',
       dataIndex: 'price',
+      key: 'price',      
       width: '30%',
       editable: true,
     },
     {
       title: 'Количество',
       dataIndex: 'count',
+      key: 'count',
       width: '30%',
+      editable: true,
     },
     {
       title: 'Категория',
       dataIndex: 'category',
+      key: 'category',
       render: (_,record, index) => (
         <Select
           defaultValue={record.categories[record.categories.findIndex(e => e.id === record.category)].name}
@@ -180,6 +187,7 @@ const MaterialsControl = ({data}) => {
     {
       title: 'Подкатегория',
       dataIndex: 'subCategory',
+      key: 'subCategory',
       render: (_,record, index) => (
         <Select
           defaultValue={record.subCategoriesConst[record.subCategoriesConst.findIndex(e => e.id === record.subCategory)].name}
@@ -190,7 +198,7 @@ const MaterialsControl = ({data}) => {
         >
           {
             record.categories.map(category => {
-              return <OptGroup label={category.name}>
+              return <OptGroup label={category.name} key={category.id}>
                 {
                   record.subCategories.filter(e => e.category === category.id).map(subCategory => {
                     return <Option key={subCategory.id} value={subCategory.id}>{subCategory.name}</Option>
@@ -205,6 +213,7 @@ const MaterialsControl = ({data}) => {
     {
       title: 'Сохранить',
       dataIndex: 'save',
+      key: 'save',
       render: (_, record) =>
       dataSource.length >= 1 ? (
           <Popconfirm title="Сохранить изменения?" disabled={visibleEdit} onConfirm={() => saveChanges(record)}>
@@ -215,6 +224,7 @@ const MaterialsControl = ({data}) => {
     {
       title: 'Удалить',
       dataIndex: 'delete',
+      key: 'delete',
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm title="Удалить товар?" onConfirm={() => handleDelete(record.key)}>
@@ -342,6 +352,7 @@ const MaterialsControl = ({data}) => {
           <Form.Item 
             label="Название" 
             name="name"
+            key="name"
             rules={[
               {
                 required: true,
@@ -354,6 +365,7 @@ const MaterialsControl = ({data}) => {
           <Form.Item 
             label="Цена" 
             name="price"
+            key="price"
             rules={[
               {
                 required: true,
@@ -366,6 +378,7 @@ const MaterialsControl = ({data}) => {
           <Form.Item 
             label="Количество" 
             name="count"
+            key="count"
             rules={[
               {
                 required: true,
@@ -375,7 +388,7 @@ const MaterialsControl = ({data}) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Категория" name="category"
+          <Form.Item label="Категория" name="category" key="category"
             rules={[
               {
                 required: true,
@@ -393,7 +406,7 @@ const MaterialsControl = ({data}) => {
               }
             </Select>
           </Form.Item>
-          <Form.Item label="Подкатегория" name="subcategory"
+          <Form.Item label="Подкатегория" name="subcategory" key="subcategory"
             rules={[
               {
                 required: true,
@@ -414,6 +427,7 @@ const MaterialsControl = ({data}) => {
           <Form.Item 
             label="Описание" 
             name="description"
+            key="description"
             rules={[
               {
                 required: true,

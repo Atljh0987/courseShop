@@ -3,6 +3,7 @@ import * as types from '../types'
 import { server } from '../config'
 import Link from 'next/link'
 import Router from 'next/router'
+import { getCountAction } from './MaterialsActions'
 
 export const checkLogin = () => {  
   return dispatch => {
@@ -23,6 +24,7 @@ export const checkAccess = (link) => {
   return dispatch => {
     axios.get(server.back + "/api/" + link, { withCredentials: true }).then(res => {
       if(res.data.hasAccess === false) {
+        dispatch(getCountAction())
         dispatch(openAuthModal('/' + link))
       } else {        
         Router.push('/' + link)
@@ -45,6 +47,7 @@ export const closeAuthModal = () => {return { type: types.CLOSEMODAL }}
 
 export const openConfirmedModal = () => {
   return dispatch => {
+    dispatch(getCountAction())
     axios.get(server.back + "/api/auth/check").then(res => {
       if(res.data.isAuth) {
         dispatch(logInSuccess(res.data))
