@@ -155,7 +155,6 @@ const MaterialsControl = ({data}) => {
     {
       title: 'Количество',
       dataIndex: 'count',
-      key: 'count',
       width: '30%',
       editable: true,
     },

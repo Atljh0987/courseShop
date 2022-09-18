@@ -4,7 +4,6 @@
  */
 package com.course.back.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 
 /**
  *
@@ -22,17 +19,15 @@ import lombok.Getter;
  */
 @Entity
 @Data
-public class Cart {
+public class OrderDetail {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   
   @ManyToOne
-  private Materials material;
+  private UserOrder userOrder;
   
-  @JsonIgnore
-  @ManyToOne
-  private Users user;
-     
-  private int count;
+  @OneToOne
+  @JoinColumn(name = "order_detail_id")
+  private Materials material;
 }

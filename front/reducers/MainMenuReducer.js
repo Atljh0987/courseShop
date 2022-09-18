@@ -99,7 +99,7 @@ export const controlMenu = (state = controlInit, {type, payload}) => {
     case types.CARTCOUNT:
       const stateChangeCount = Array.from(state)
       stateChangeCount[stateChangeCount.findIndex(e => e.key === 'cart')] = {
-        label: "Корзина: " + payload ?? 0,
+        label: "Корзина: " + (payload ? payload: 0),
         key: 'cart',
         icon: <ShoppingCartOutlined />
       }

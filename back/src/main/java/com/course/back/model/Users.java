@@ -60,6 +60,6 @@ public class Users {
   private List<Cart> cart;
   
   @JsonIgnore
-  @OneToOne(mappedBy = "user")
-  private UserOrder order;
+  @OneToMany(mappedBy = "user")
+  private List<UserOrder> userOrder;
 }

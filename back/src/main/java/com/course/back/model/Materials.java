@@ -71,4 +71,8 @@ public class Materials {
   @JsonIgnore
   @OneToMany(mappedBy = "material")
   private List<Cart> cart;
+  
+  @JsonIgnore
+  @OneToOne(mappedBy = "material")
+  private OrderDetail orderDetail;
 }
