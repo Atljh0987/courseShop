@@ -4,6 +4,8 @@
  */
 package com.course.back.model;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,12 +24,14 @@ import lombok.Data;
 public class OrderDetail {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-  
-  @ManyToOne
-  private UserOrder userOrder;
+  private long id;  
   
   @OneToOne
   @JoinColumn(name = "order_detail_id")
   private Materials material;
+  
+  @ManyToOne(cascade=CascadeType.ALL)
+  private UserOrder userOrder;
+  
+  private int count;
 }

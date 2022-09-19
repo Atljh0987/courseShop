@@ -4,15 +4,13 @@
  */
 package com.course.back.repositories;
 
-import com.course.back.model.UserOrder;
-import java.util.List;
-import java.util.Optional;
+import com.course.back.model.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Admin
  */
-public interface UserOrderRepository extends JpaRepository<UserOrder, Long> {
-  Optional<UserOrder> findByUserId(long userId);
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
+  
 }

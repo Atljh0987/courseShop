@@ -58,8 +58,4 @@ public class Users {
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   private List<Cart> cart;
-  
-  @JsonIgnore
-  @OneToMany(mappedBy = "user")
-  private List<UserOrder> userOrder;
 }

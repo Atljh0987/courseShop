@@ -118,6 +118,24 @@ const Cart = ({data}) => {
     })
   }
 
+  const makeAnOrder = () => {
+    const params = new URLSearchParams()
+    params.append("userId", userId)
+
+    axios.post(server.back + '/api/orders/create/', params).then(res => {
+      if(res.data.success) {
+        message.success(res.data.message)
+        // const index = dataSource.findIndex(e => e.key === id);
+        // setDataSource(dataSource.filter((e, i) => i !== index))
+        dispatch(getCountAction())
+      } else {
+        message.error(res.data.message)
+      }
+    }).catch(err => {
+      message.error(err.message)
+    })
+  }
+
   const columns = [
     {
       title: 'Изображение',
@@ -161,7 +179,7 @@ const Cart = ({data}) => {
   return (<div>
     <MainHeader />
     <h1>Корзина</h1>
-    <Button>Оформить</Button>
+    <Button onClick={makeAnOrder}>Оформить</Button>
     <Table dataSource={dataSource.sort((a, b) => a.key - b.key)} columns={columns} />
     </div>)
 }

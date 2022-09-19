@@ -27,6 +27,10 @@ public class CartService {
     return cartRepository.findByUserId(Long.valueOf(id));
   }
   
+  public void deleteAll(List<Cart> carts) {
+    cartRepository.deleteAll(carts);
+  }
+  
   public int sumCount(int id) {
     return cartRepository.sumCount(Long.valueOf(id));
   }

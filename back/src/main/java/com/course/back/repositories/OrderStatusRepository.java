@@ -4,12 +4,13 @@
  */
 package com.course.back.repositories;
 
+import com.course.back.model.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Admin
  */
-public interface OrderDetail extends JpaRepository<OrderDetail, Long> {
-  
+public interface OrderStatusRepository extends JpaRepository<OrderStatus, Long> {
+  OrderStatus findByName(String name);
 }

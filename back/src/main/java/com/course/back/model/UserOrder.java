@@ -5,6 +5,7 @@
 package com.course.back.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,13 +27,13 @@ public class UserOrder {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   
-  @OneToMany(mappedBy = "id")
-  private List<Materials> material;
+  @OneToMany(mappedBy = "userOrder", cascade=CascadeType.ALL)
+  private List<OrderDetail> orderDetails;
   
   @ManyToOne
   private Users user;
   
   @OneToOne
-  @JoinColumn(name = "order_status_id")
+  @JoinColumn(name = "order_id")
   private OrderStatus orderStatus;
 }
