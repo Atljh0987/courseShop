@@ -52,8 +52,13 @@ public class UserOrderController {
   }
   
   @PostMapping("/get/{id}")
-  public Optional<UserOrder> getById(@PathVariable int id) {
+  public List<UserOrder> getById(@PathVariable int id) {
     return userOrderService.findByUserId(Long.valueOf(id));
+  }
+  
+  @PostMapping("/disableorder")
+  public void changeStatus(@RequestParam int orderId) {
+    userOrderService.changeStatus(orderId, orderStatusService.getOrderStatusByName("Отменено"));
   }
   
   @PostMapping("/create")

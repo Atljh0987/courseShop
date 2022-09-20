@@ -4,6 +4,7 @@
  */
 package com.course.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class UserOrder {
   @OneToMany(mappedBy = "userOrder", cascade=CascadeType.ALL)
   private List<OrderDetail> orderDetails;
   
+  @JsonIgnore
   @ManyToOne
   private Users user;
   

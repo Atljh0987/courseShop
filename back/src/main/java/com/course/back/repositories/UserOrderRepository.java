@@ -14,5 +14,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Admin
  */
 public interface UserOrderRepository extends JpaRepository<UserOrder, Long> {
-  Optional<UserOrder> findByUserId(long userId);
+  List<UserOrder> findByUserId(long userId);
 }

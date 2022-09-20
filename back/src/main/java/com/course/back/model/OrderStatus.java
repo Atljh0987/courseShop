@@ -4,6 +4,7 @@
  */
 package com.course.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,7 @@ public class OrderStatus {
   
   private String name;    
   
+  @JsonIgnore
   @OneToOne(mappedBy = "orderStatus")
   private UserOrder order;
 }

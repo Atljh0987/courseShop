@@ -22,4 +22,8 @@ public class OrderDetailService {
   public void addAll(List<OrderDetail> orderDetails) {
     orderDetailRepository.saveAll(orderDetails);
   }
+  
+  public List<OrderDetail> getByOrderId(int id) {
+    return orderDetailRepository.findByUserOrderId(Long.valueOf(id));
+  }
 }

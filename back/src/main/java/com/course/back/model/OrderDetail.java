@@ -4,6 +4,7 @@
  */
 package com.course.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class OrderDetail {
   @JoinColumn(name = "order_detail_id")
   private Materials material;
   
+  @JsonIgnore
   @ManyToOne(cascade=CascadeType.ALL)
   private UserOrder userOrder;
   
