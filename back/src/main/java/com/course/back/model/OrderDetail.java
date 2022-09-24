@@ -27,8 +27,8 @@ public class OrderDetail {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;  
   
-  @OneToOne
-  @JoinColumn(name = "order_detail_id")
+//  @JsonIgnore
+  @ManyToOne(cascade=CascadeType.ALL)
   private Materials material;
   
   @JsonIgnore

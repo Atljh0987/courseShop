@@ -5,11 +5,12 @@
 package com.course.back.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import lombok.Data;
 
 /**
@@ -26,6 +27,6 @@ public class OrderStatus {
   private String name;    
   
   @JsonIgnore
-  @OneToOne(mappedBy = "orderStatus")
-  private UserOrder order;
+  @OneToMany(mappedBy = "orderStatus")
+  private List<UserOrder> order;
 }

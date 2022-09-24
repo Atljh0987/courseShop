@@ -6,6 +6,7 @@ package com.course.back.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -56,6 +57,10 @@ public class Users {
   private int confirmed;
   
   @JsonIgnore
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
   private List<Cart> cart;
+  
+  @JsonIgnore
+  @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+  private List<UserOrder> userOrder;
 }

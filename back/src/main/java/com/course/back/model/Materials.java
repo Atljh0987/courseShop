@@ -6,11 +6,11 @@ package com.course.back.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -67,14 +67,14 @@ public class Materials {
   private int count;  
   
 //  @JsonIgnore
-  @OneToMany(mappedBy = "material")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "material")
   private List<Photo> photo;
   
   @JsonIgnore
-  @OneToMany(mappedBy = "material")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "material")
   private List<Cart> cart;
   
   @JsonIgnore
-  @OneToOne(mappedBy = "material")
-  private OrderDetail orderDetail;
+  @OneToMany(cascade=CascadeType.ALL, mappedBy = "material")
+  private List<OrderDetail> orderDetail;
 }

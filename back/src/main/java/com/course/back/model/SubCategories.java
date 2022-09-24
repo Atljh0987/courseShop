@@ -6,6 +6,7 @@ package com.course.back.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +41,7 @@ public class SubCategories {
   }
   
   @JsonIgnore
-  @OneToMany(mappedBy = "subCategory")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "subCategory")
   private List<Materials> materials;
 
   public Long getCategory() {

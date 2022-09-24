@@ -32,10 +32,9 @@ public class UserOrder {
   private List<OrderDetail> orderDetails;
   
   @JsonIgnore
-  @ManyToOne
+  @ManyToOne(cascade=CascadeType.ALL)
   private Users user;
   
-  @OneToOne
-  @JoinColumn(name = "order_id")
+  @ManyToOne(cascade=CascadeType.ALL)
   private OrderStatus orderStatus;
 }
